@@ -1,0 +1,787 @@
+html {
+  font-size: 16px; /* Lock base size — prevents Chrome on Android scaling up */
+}
+
+/* Import Google Font - Poppins */
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap");
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "Poppins", sans-serif;
+}
+
+:root {
+  /* School colors – light mode */
+  --primary-dark: #191970;    /* midnight blue */
+  --accent: #32CD32;          /* lime green */
+  --primary-light: #87CEFA;   /* sky blue */
+  
+  /* Theme variables (keeping your structure) */
+  --text-color: #edf3ff;
+  --subheading-color: #97a7ca;
+  --placeholder-color: #c3cdde;
+  --primary-color: #101623;
+  --secondary-color: #283045;
+  --secondary-hover-color: #333e58;
+  --scrollbar-color: #626a7f;
+}
+
+body.light-theme {
+  /* Light theme using school colors */
+  --text-color: #090c13;
+  --subheading-color: #191970;      /* midnight blue for subheading */
+  --placeholder-color: #606982;
+  --primary-color: #f3f7ff;
+  --secondary-color: #dce6f9;
+  --secondary-hover-color: #cbd5e6;
+  --scrollbar-color: #a2aac2;
+}
+
+body {
+  color: var(--text-color);
+  background: var(--primary-color);
+  overflow: hidden;
+}
+
+/* --- Hamburger Menu (unchanged, but uses school colors) --- */
+.ham {
+  width: 40px;
+  height: 40px;
+  background: var(--primary-dark);
+  border-radius: 5px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  z-index: 300;
+  position: fixed;
+  top: 15px;
+  left: 20px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.ham:hover {
+  background: var(--accent);
+}
+
+.ham .line {
+  width: 25px;
+  height: 3px;
+  background: #fff;
+  margin: 3px 0;
+  border-radius: 3px;
+  transition: all 0.4s ease;
+  transform-origin: center;
+}
+
+#check:checked ~ .ham .line1 {
+  transform: translateY(9px) rotate(45deg);
+}
+#check:checked ~ .ham .line2 {
+  opacity: 0;
+}
+#check:checked ~ .ham .line3 {
+  transform: translateY(-9px) rotate(-45deg);
+}
+
+/* --- Menu (sidebar) – improved for desktop --- */
+.menu {
+  display: flex;
+  flex-direction: column;
+  width: 260px;
+  height: 100vh;
+  position: fixed;
+  top: 0;
+  left: -280px;  /* hidden on mobile */
+  z-index: 200;
+  background-color: var(--secondary-color);
+  transition: left 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  padding-top: 70px;
+  box-shadow: 5px 0 15px rgba(0,0,0,0.2);
+}
+
+#check:checked ~ .menu {
+  left: 0;
+}
+
+.menu ul {
+  list-style: none;
+  text-align: left;
+  padding: 0 20px;
+}
+
+.menu li {
+  margin: 1.2rem 0;
+}
+
+.menu a {
+  color: var(--text-color);
+  text-decoration: none;
+  font-size: 1.1rem;
+  font-weight: 500;
+  transition: all 0.2s;
+  display: block;
+  padding: 8px 12px;
+  border-radius: 8px;
+}
+
+.menu a:hover {
+  background: var(--primary-dark);
+  color: white;
+  transform: translateX(5px);
+}
+
+/* Desktop: show sidebar always */
+@media (min-width: 768px) {
+  /* nav.css handles the top navbar — don't override it here */
+  .ham { display: none !important; }
+
+  /* Chat container and prompt bar: full width, no sidebar offset */
+  .container {
+    margin-left: 0 !important;
+    width: 100% !important;
+  }
+  .prompt-container {
+    left: 0 !important;
+    width: 100% !important;
+  }
+}
+
+/* --- Main Layout (unchanged) --- */
+.container {
+  overflow-y: auto;
+  padding: 32px 0 200px; /* increased so last message clears fixed prompt bar */
+  height: 100dvh;
+  scrollbar-color: var(--scrollbar-color) transparent;
+}
+
+.container .app-header,
+.container .suggestions,
+.container .chats-container {
+  margin: 0 auto;
+  width: 100%;
+  padding: 0 20px;
+  max-width: 990px;
+}
+
+.container .app-header {
+  margin-top: 3vh;
+}
+
+.app-header .heading {
+  width: fit-content;
+  font-size: 3rem;
+  background: linear-gradient(135deg, var(--primary-dark), var(--accent));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+/*.app-header .sub-heading {
+  font-size: 2.6rem;
+  margin-top: -5px;
+  color: var(--subheading-color);
+}*/
+
+/* Suggestions */
+.container .suggestions {
+  list-style: none;
+  display: flex;
+  gap: 15px;
+  margin-top: 9.5vh;
+  overflow-x: auto;
+  scroll-snap-type: mandatory;
+  scrollbar-width: none;
+}
+
+body.chats-active .container .app-header,
+body.chats-active .container .suggestions {
+  display: none;
+}
+
+.suggestions .suggestions-item {
+  cursor: pointer;
+  padding: 18px;
+  width: 228px;
+  flex-shrink: 0;
+  display: flex;
+  scroll-snap-align: center;
+  flex-direction: column;
+  align-items: flex-end;
+  border-radius: 12px;
+  justify-content: space-between;
+  background: var(--secondary-color);
+  transition: 0.3s ease;
+}
+
+.suggestions .suggestions-item:hover {
+  background: var(--secondary-hover-color);
+  transform: translateY(-4px);
+}
+
+.suggestions .suggestions-item .text {
+  font-size: 1.1rem;
+}
+
+.suggestions .suggestions-item .icon {
+  width: 45px;
+  height: 45px;
+  display: flex;
+  font-size: 1.4rem;
+  margin-top: 35px;
+  align-self: flex-end;
+  align-items: center;
+  border-radius: 50%;
+  justify-content: center;
+  color: white;
+  background: var(--primary-dark);
+  transition: 0.2s;
+}
+
+.suggestions .suggestions-item:hover .icon {
+  background: var(--accent);
+  transform: scale(1.05);
+}
+
+/* Individual icon colors (optional) */
+.suggestions .suggestions-item:nth-child(2) .icon { background: var(--accent); }
+.suggestions .suggestions-item:nth-child(3) .icon { background: var(--primary-light); color: var(--primary-dark); }
+.suggestions .suggestions-item:nth-child(4) .icon { background: #ffc107; }
+
+/* Chat container */
+.container .chats-container {
+  display: flex;
+  gap: 20px;
+  flex-direction: column;
+}
+
+.chats-container .message {
+  display: flex;
+  gap: 11px;
+  align-items: center;
+}
+
+.chats-container .message .avatar {
+  width: 43px;
+  height: 43px;
+  flex-shrink: 0;
+  align-self: flex-start;
+  border-radius: 50%;
+  padding: 6px;
+  margin-right: -7px;
+  background: var(--secondary-color);
+  border: 1px solid var(--secondary-hover-color);
+}
+
+.chats-container .message.loading .avatar {
+  animation: rotate 3s linear infinite;
+}
+
+@keyframes rotate {
+  100% { transform: rotate(360deg); }
+}
+
+.chats-container .message .message-text {
+  word-wrap: break-word;
+  white-space: pre-line;
+}
+
+.chats-container .bot-message {
+  margin: 9px 0;
+}
+
+.chats-container .user-message {
+  flex-direction: column;
+  align-items: flex-end;
+}
+
+.chats-container .user-message .message-text {
+  padding: 12px 16px;
+  max-width: 75%;
+  background: var(--primary-dark);
+  color: white;
+  border-radius: 13px 13px 3px 13px;
+}
+
+.chats-container .bot-message .message-text {
+  background: var(--secondary-color);
+  padding: 12px 16px;
+  border-radius: 13px 13px 13px 3px;
+}
+
+/* Prompt area */
+.container .prompt-container {
+  position: fixed;
+  width: 100%;
+  left: 0;
+  bottom: 0;
+  padding: 16px 0;
+  background: var(--primary-color);
+  z-index: 150;
+}
+
+.prompt-container .prompt-wrapper {
+  margin: 0 auto;
+  max-width: 990px;
+  padding: 0 20px;
+}
+
+.prompt-container :where(.prompt-wrapper, .prompt-form, .prompt-actions) {
+  display: flex;
+  gap: 10px;
+  align-items: flex-end;
+}
+
+.prompt-container .prompt-form {
+  width: 100%;
+  border-radius: 24px;
+  background: var(--secondary-color);
+  display: flex;
+  align-items: flex-end;
+  padding: 8px 8px 8px 14px;
+  gap: 8px;
+  transition: box-shadow .2s, border-color .2s;
+  min-height: 0;
+  border: 1px solid transparent;
+}
+
+.prompt-container .prompt-form:focus-within {
+  border-color: var(--accent);
+  box-shadow: 0 4px 16px rgba(50,205,50,0.18);
+}
+
+.prompt-form .prompt-input {
+  flex: 1 1 auto;
+  min-width: 0;
+  width: 100%;
+  background: none;
+  outline: none;
+  border: none;
+  font-size: 1rem;
+  color: var(--text-color);
+  font-family: inherit;
+  line-height: 1.45;
+  resize: none;
+  overflow-y: auto;
+  min-height: 28px;
+  max-height: 220px;
+  padding: 4px 2px;
+  display: block;
+}
+
+.prompt-form .prompt-input::placeholder {
+  color: var(--placeholder-color);
+}
+
+.prompt-wrapper button {
+  width: 44px;
+  height: 44px;
+  flex-shrink: 0;
+  cursor: pointer;
+  border-radius: 50%;
+  font-size: 1.1rem;
+  border: none;
+  color: var(--text-color);
+  background: transparent;
+  transition: background 0.2s, transform 0.15s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.prompt-wrapper button:hover {
+  background: var(--secondary-hover-color);
+  transform: scale(1.05);
+}
+
+.prompt-wrapper :is(#cancel-file-btn, .file-icon) {
+  background: var(--secondary-hover-color);
+}
+
+.prompt-form .prompt-actions {
+  gap: 4px;
+  margin-right: 0;
+  align-items: center;
+}
+
+.prompt-wrapper .prompt-form :where(.file-upload-wrapper, button, img) {
+  position: relative;
+  height: 40px;
+  width: 40px;
+}
+
+.prompt-form .prompt-actions #send-prompt-btn {
+  color: #fff;
+  display: flex !important;
+  align-items: center;
+  justify-content: center;
+  background: var(--accent);
+  box-shadow: 0 3px 12px rgba(50,205,50,0.30);
+}
+
+.prompt-form .prompt-input:valid ~ .prompt-actions #send-prompt-btn {
+  display: flex;
+}
+
+.prompt-form #send-prompt-btn:hover {
+  background: #28a428;
+  box-shadow: 0 5px 16px rgba(50,205,50,0.40);
+}
+
+/* --- FIXED FILE UPLOAD CSS --- */
+
+/* 1. Hide the file previews and cancel button by default */
+.prompt-form .file-upload-wrapper :where(img, .file-icon-display, #cancel-file-btn) {
+  display: none;
+  border-radius: 50%;
+  object-fit: cover;
+  position: absolute;
+}
+
+/* 2. Force the paperclip button to be visible by default */
+.prompt-form .file-upload-wrapper #add-file-btn {
+  display: block !important;
+  position: absolute;
+}
+
+/* 3. When a file is attached, HIDE the paperclip button */
+.prompt-form .file-upload-wrapper.active #add-file-btn {
+  display: none !important;
+}
+
+/* 4. Show the image preview when an image is attached */
+.prompt-form .file-upload-wrapper.active.img-attached img {
+  display: block;
+}
+
+/* 5. Show the PDF icon when a document is attached */
+.prompt-form .file-upload-wrapper.active.file-attached .file-icon-display {
+  display: block;
+  font-size: 1.4rem;
+  text-align: center;
+  line-height: 45px; /* Centers the icon vertically */
+}
+
+/* 6. Show the small red cancel (X) button when you hover over the attached file */
+.prompt-form .file-upload-wrapper.active:hover #cancel-file-btn {
+  display: block;
+}
+
+.prompt-form :is(#stop-response-btn:hover, #cancel-file-btn) {
+  color: #d62939;
+}
+
+.prompt-wrapper .prompt-form .file-icon {
+  color: var(--accent);
+}
+
+.prompt-form #stop-response-btn,
+body.bot-responding .prompt-form .file-upload-wrapper {
+  display: none;
+}
+
+body.bot-responding .prompt-form #stop-response-btn {
+  display: block;
+}
+
+.prompt-container .disclaimer-text {
+  font-size: 0.9rem;
+  text-align: center;
+  padding: 16px 20px 0;
+  color: var(--placeholder-color);
+}
+
+/* Modal (your settings modal) */
+.modal-overlay {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0,0,0,0.6);
+  backdrop-filter: blur(4px);
+  z-index: 1000;
+  justify-content: center;
+  align-items: center;
+}
+
+.modal-content {
+  background: var(--secondary-color);
+  border-radius: 16px;
+  max-width: 400px;
+  width: 90%;
+  padding: 24px;
+  color: var(--text-color);
+}
+
+.modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+}
+
+.close-modal {
+  background: none;
+  border: none;
+  font-size: 28px;
+  cursor: pointer;
+  color: var(--text-color);
+}
+
+.theme-options {
+  display: flex;
+  gap: 12px;
+  margin-top: 20px;
+  flex-wrap: wrap;
+}
+
+.theme-btn {
+  flex: 1;
+  padding: 10px;
+  background: var(--primary-color);
+  border: 1px solid var(--placeholder-color);
+  border-radius: 8px;
+  cursor: pointer;
+  transition: 0.2s;
+  color: var(--text-color);
+}
+
+.theme-btn:hover {
+  background: var(--accent);
+  color: white;
+}
+
+
+/* ── Attached image in chat bubble ─────────────────────────────────────────── */
+/* IMPORTANT: explicit px values — min() / vw behaves differently in Chrome mobile */
+.chats-container .user-message .img-attachment {
+  display: block;
+  width: 200px;
+  height: 160px;
+  object-fit: cover;
+  border-radius: 10px;
+  margin-top: 8px;
+  border: 2px solid rgba(255,255,255,0.2);
+  cursor: pointer;
+}
+
+.chats-container .user-message .file-attachment {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 8px;
+  padding: 8px 14px;
+  background: rgba(255,255,255,0.12);
+  border-radius: 8px;
+  font-size: 0.85rem;
+  color: #fff;
+  max-width: 220px;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .container {
+    padding: 20px 0 130px;
+  }
+  .app-header :is(.heading, .sub-heading) {
+    font-size: 2rem;
+    line-height: 1.4;
+  }
+  .app-header .sub-heading {
+    font-size: 1.7rem;
+  }
+  .container .chats-container {
+    gap: 15px;
+  }
+  .chats-container .bot-message {
+    margin: 4px 0;
+  }
+  .prompt-container .prompt-wrapper,
+  .prompt-container .prompt-actions {
+    gap: 8px;
+  }
+  .prompt-container .prompt-form {
+    min-height: 0;
+    align-items: stretch;
+  }
+  .prompt-form :is(.file-upload-wrapper, button, img) {
+    height: 40px;
+    width: 40px;
+  }
+  .prompt-form .prompt-input {
+    padding: 9px 6px;
+  }
+  .prompt-form .file-upload-wrapper.active #cancel-file-btn {
+    opacity: 0;
+  }
+  .prompt-wrapper.hide-controls :where(#theme-toggle-btn, #delete-chats-btn) {
+    display: none;
+  }
+}
+
+.prompt-actions {
+  display: flex;
+  align-items: center;
+  gap: 10px; /* Gives space between paperclip, stop, and send buttons */
+}
+
+.file-upload-wrapper {
+  display: flex;
+  align-items: center;
+}
+
+/* duplicate .disclaimer-text rule removed */
+/* ── Nav sub-items: dark text only on MOBILE light sidebar ─────────────
+   On desktop the nav bar is always dark blue so text must always be white.
+   On mobile light sidebar (#dce6f9) we need dark text. ───────────────── */
+
+/* Mobile only — light sidebar needs dark text */
+@media (max-width: 768px) {
+  body.light-theme .nav-sub li a {
+    color: #1a365d !important;
+  }
+  body.light-theme .nav-sub li a:hover {
+    color: #191970 !important;
+    background: rgba(25, 25, 112, 0.12) !important;
+  }
+  body.light-theme .nav-sub-label {
+    color: #1a365d !important;
+  }
+  body.light-theme .nav-has-sub.open .nav-sub-label,
+  body.light-theme .nav-sub-label:hover {
+    color: #ffffff !important;
+  }
+}
+
+/* Desktop — nav bar always dark blue, text always white */
+@media (min-width: 769px) {
+  .nav-sub-label {
+    color: #ffffff !important;
+  }
+  .nav-sub li a {
+    color: #ffffff !important;
+  }
+  .nav-sub li a:hover {
+    color: #ffffff !important;
+    background: rgba(255,255,255,0.15) !important;
+  }
+}
+
+/* ── Compact delete button ───────────────────────────── */
+.external-controls { flex-shrink: 0; }
+#delete-chats-btn  {
+  width: 42px !important;
+  height: 42px !important;
+  min-width: 42px !important;
+  border-radius: 50% !important;
+}
+
+/* ── Prevent form from overflowing screen ────────────── */
+.prompt-container .prompt-wrapper {
+  min-width: 0;
+  /* overflow: hidden removed — it was clipping the growing textarea */
+}
+.prompt-container .prompt-form {
+  min-width: 0;
+  flex: 1 1 auto;
+}
+.prompt-form .prompt-actions {
+  flex-shrink: 0;
+  align-self: flex-end;
+  padding-bottom: 2px;
+}
+
+/* ════════════════════════════════════════════════════════════
+   REDESIGN: ChatGPT/Lovable-style vertical input layout
+   Textarea fills the top, buttons sit in a row at the bottom.
+   Colors unchanged — only layout/structure.
+   ════════════════════════════════════════════════════════════ */
+
+/* Wrapper: keep delete button aligned next to the new tall form */
+.prompt-container .prompt-wrapper {
+  align-items: flex-end;
+  gap: 10px;
+}
+
+/* Form becomes a vertical stack — compact when empty, grows with content */
+.prompt-container .prompt-form {
+  flex-direction: column;
+  align-items: stretch;
+  padding: 8px 12px 8px 14px;
+  min-height: 0;
+  border-radius: 22px;
+  gap: 4px;
+}
+
+/* Textarea: small default (one line), grows as user types */
+.prompt-form .prompt-input {
+  width: 100%;
+  min-height: 28px;
+  max-height: 220px;
+  padding: 4px 2px;
+  font-size: 1rem;
+  line-height: 1.45;
+}
+
+/* Bottom row holding file-upload + actions */
+.prompt-form .file-upload-wrapper,
+.prompt-form .prompt-actions {
+  align-self: auto;
+}
+
+/* Make the form lay textarea on top, then a row with attach (left) + send (right) */
+.prompt-container .prompt-form {
+  display: grid;
+  grid-template-areas:
+    "input input"
+    "left  right";
+  grid-template-columns: 1fr auto;
+  row-gap: 4px;
+  column-gap: 8px;
+}
+.prompt-form .prompt-input        { grid-area: input; }
+.prompt-form .file-upload-wrapper { grid-area: left;  justify-self: start; }
+.prompt-form .prompt-actions      { grid-area: right; justify-self: end; }
+
+/* Ensure buttons keep their round shape inside the new row */
+.prompt-form .file-upload-wrapper,
+.prompt-form .file-upload-wrapper #add-file-btn {
+  position: relative;
+  width: 42px;
+  height: 42px;
+}
+.prompt-form .file-upload-wrapper #add-file-btn {
+  position: static !important;
+}
+
+/* Send button stays prominent on the right */
+.prompt-form .prompt-actions #send-prompt-btn {
+  width: 46px;
+  height: 46px;
+}
+
+/* Mobile: don't force the old fixed height; give the new layout room */
+@media (max-width: 768px) {
+  .prompt-container .prompt-form {
+    min-height: 0;
+    padding: 8px 10px 8px 12px;
+    border-radius: 20px;
+  }
+  .prompt-form .prompt-input {
+    min-height: 26px;
+    max-height: 180px;
+  }
+  .prompt-form .prompt-actions #send-prompt-btn {
+    width: 44px;
+    height: 44px;
+  }
+  #delete-chats-btn {
+    width: 38px !important;
+    height: 38px !important;
+    min-width: 38px !important;
+  }
+}

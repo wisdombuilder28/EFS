@@ -1,0 +1,432 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Gallery | Emeakaroha Foundation School</title>
+
+  <script>
+    (() => {
+      const t = localStorage.getItem('theme') || 'dark';
+      document.documentElement.setAttribute('data-theme', t);
+      if (t === 'dark') document.documentElement.classList.add('dark-mode');
+    })();
+  </script>
+<link rel="manifest" href="/manifest.json" />
+<meta name="theme-color" content="#191970" />
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+<meta name="apple-mobile-web-app-title" content="EFS" />
+<link rel="apple-touch-icon" href="IMG-20260326-WA0001~2.jpg" />
+  <link rel="stylesheet" href="nav.css" />
+  <link rel="stylesheet" href="gallery.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" crossorigin="anonymous" />
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+</head>
+
+<script>
+  if ('serviceWorker' in navigator) {
+    window.addEventListener('load', () => {
+      navigator.serviceWorker.register('/sw.js');
+    });
+  }
+</script>
+
+<body>
+  <!-- HAMBURGER -->
+  <input type="checkbox" id="check" hidden />
+  <label for="check" class="ham" aria-label="Toggle menu">
+    <span class="line line1"></span>
+    <span class="line line2"></span>
+    <span class="line line3"></span>
+  </label>
+
+  <!-- NAV -->
+  <nav class="menu">
+    <ul>
+      <li><a href="index.html"><i class="fas fa-home"></i> Home</a></li>
+      <li><a href="index.html#about"><i class="fas fa-info-circle"></i> About</a></li>
+      <li><a href="index.html#programs"><i class="fas fa-graduation-cap"></i> Programs</a></li>
+      <li><a href="index.html#facilities"><i class="fas fa-building"></i> Facilities</a></li>
+      <li><a href="index.html#contact"><i class="fas fa-envelope"></i> Contact</a></li>
+      <li><a href="#" id="open-settings-link"><i class="fas fa-cog"></i> Setting</a></li>
+      <li><a href="developers.html"><i class="fas fa-code"></i> Developers</a></li>
+      <li class="nav-has-sub">
+        <span class="nav-sub-label"><i class="fas fa-comments"></i> ChatAI ▾</span>
+        <ul class="nav-sub">
+          <li><a href="AI.html"><i class="fas fa-robot"></i> Assistant Mode</a></li>
+          <li><a href="study.html"><i class="fas fa-book-open"></i> Study Mode</a></li>
+        </ul>
+      </li>
+      <li><a href="news.html"><i class="fas fa-newspaper"></i> News</a></li>
+      <li><a href="gallery.html" class="nav-active"><i class="fas fa-images"></i> Gallery</a></li>
+    </ul>
+  </nav>
+
+  <!-- SETTINGS MODAL -->
+  <div id="settingsModal" class="modal-overlay">
+    <div class="modal-box">
+      <div class="modal-head">
+        <h2>Settings</h2>
+        <button class="close-modal" aria-label="Close">&times;</button>
+      </div>
+      <div class="modal-body">
+        <h3>Appearance</h3>
+        <p class="text-muted">Choose how the site looks to you.</p>
+        <div class="theme-options">
+          <button class="theme-btn" data-theme="light"><i class="fas fa-sun"></i> Light</button>
+          <button class="theme-btn" data-theme="dark"><i class="fas fa-moon"></i> Dark</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- HERO — logo lives here, not floating over cards -->
+  <section class="g-hero">
+    <!-- Logo inside hero so it never overlaps the gallery grid -->
+    <div class="g-hero__logo">
+      <img src="images/Logo.jpg" alt="EFS Logo" />
+    </div>
+    <div class="g-hero__content">
+      <span class="g-hero__badge"><i class="fas fa-images"></i> Gallery</span>
+      <h1>School Memories</h1>
+      <p>Moments, milestones &amp; memories from Emeakaroha Foundation School</p>
+    </div>
+    <div class="g-hero__wave">
+      <svg viewBox="0 0 1440 60" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M0,30 C480,60 960,0 1440,30 L1440,60 L0,60 Z" />
+      </svg>
+    </div>
+  </section>
+
+  <!-- MAIN -->
+  <main class="g-main">
+
+    <!-- MODE TABS -->
+    <div class="g-mode-tabs">
+      <button class="g-mode-tab active" data-mode="photos">
+        <i class="fas fa-images"></i> Photos
+      </button>
+      <button class="g-mode-tab" data-mode="videos">
+        <i class="fas fa-film"></i> Videos
+      </button>
+    </div>
+
+    <!-- ══════════════ PHOTOS SECTION ══════════════ -->
+    <section id="photos-section" class="g-section">
+
+      <div class="g-filters__wrap">
+        <div class="g-filters">
+          <button class="g-filter active" data-filter="all"><i class="fas fa-border-all"></i><span>All Photos</span></button>
+          <button class="g-filter" data-filter="campus"><i class="fas fa-school"></i><span>Campus</span></button>
+          <button class="g-filter" data-filter="students"><i class="fas fa-user-graduate"></i><span>Students</span></button>
+          <button class="g-filter" data-filter="events"><i class="fas fa-calendar-star"></i><span>Events</span></button>
+          <button class="g-filter" data-filter="sports"><i class="fas fa-futbol"></i><span>Sports</span></button>
+          <button class="g-filter" data-filter="facilities"><i class="fas fa-building"></i><span>Facilities</span></button>
+        </div>
+      </div>
+
+      <p class="g-count" id="g-photo-count"></p>
+
+      <div class="g-grid" id="g-photo-grid">
+
+        <!-- Campus -->
+        <div class="g-item" data-category="campus" data-src="images/DSC_1492 (1).jpg" data-caption="School Main View">
+          <div class="g-thumb"><img src="images/DSC_1492 (1).jpg" alt="School main view" loading="lazy" />
+            <div class="g-overlay"><span class="g-overlay__title">School Main View</span></div>
+          </div>
+          <div class="g-label"><span class="g-badge campus">Campus</span><span class="g-title">School Main View</span></div>
+        </div>
+
+        <div class="g-item" data-category="campus" data-src="images/school-compound.png" data-caption="School Compound">
+          <div class="g-thumb"><img src="images/school-compound.png" alt="School compound" loading="lazy" />
+            <div class="g-overlay"><span class="g-overlay__title">School Compound</span></div>
+          </div>
+          <div class="g-label"><span class="g-badge campus">Campus</span><span class="g-title">School Compound</span></div>
+        </div>
+
+        <div class="g-item" data-category="campus" data-src="images/outdoor-assembely.jpg" data-caption="Outdoor Assembly">
+          <div class="g-thumb"><img src="images/outdoor-assembely.jpg" alt="Outdoor assembly" loading="lazy" />
+            <div class="g-overlay"><span class="g-overlay__title">Outdoor Assembly</span></div>
+          </div>
+          <div class="g-label"><span class="g-badge campus">Campus</span><span class="g-title">Outdoor Assembly</span></div>
+        </div>
+
+        <!-- Facilities -->
+        <div class="g-item" data-category="facilities" data-src="images/file_000000008d2471f4b70a6d49d3056165.png" data-caption="School Facilities">
+          <div class="g-thumb"><img src="images/file_000000008d2471f4b70a6d49d3056165.png" alt="School facilities" loading="lazy" />
+            <div class="g-overlay"><span class="g-overlay__title">School Facilities</span></div>
+          </div>
+          <div class="g-label"><span class="g-badge facilities">Facilities</span><span class="g-title">School Facilities</span></div>
+        </div>
+
+        <div class="g-item" data-category="facilities" data-src="images/book.jpg" data-caption="Library & Books">
+          <div class="g-thumb"><img src="images/book.jpg" alt="Library and books" loading="lazy" />
+            <div class="g-overlay"><span class="g-overlay__title">Library &amp; Books</span></div>
+          </div>
+          <div class="g-label"><span class="g-badge facilities">Facilities</span><span class="g-title">Library &amp; Books</span></div>
+        </div>
+
+        <div class="g-item" data-category="facilities" data-src="images/learning.jpg" data-caption="Learning Session">
+          <div class="g-thumb"><img src="images/learning.jpg" alt="Learning session" loading="lazy" />
+            <div class="g-overlay"><span class="g-overlay__title">Learning Session</span></div>
+          </div>
+          <div class="g-label"><span class="g-badge facilities">Facilities</span><span class="g-title">Learning Session</span></div>
+        </div>
+
+        <!-- Students -->
+        <div class="g-item" data-category="students" data-src="images/4-1-scaled.jpg" data-caption="Students in a Learning Session">
+          <div class="g-thumb"><img src="images/4-1-scaled.jpg" alt="Students learning" loading="lazy" />
+            <div class="g-overlay"><span class="g-overlay__title">Students Learning</span></div>
+          </div>
+          <div class="g-label"><span class="g-badge students">Students</span><span class="g-title">Students in a Learning Session</span></div>
+        </div>
+
+        <div class="g-item" data-category="students" data-src="images/emeakaroha-foundation-school-2023-2024-027.jpg" data-caption="Students March in Uniform">
+          <div class="g-thumb"><img src="images/emeakaroha-foundation-school-2023-2024-027.jpg" alt="Students marching" loading="lazy" />
+            <div class="g-overlay"><span class="g-overlay__title">Students March</span></div>
+          </div>
+          <div class="g-label"><span class="g-badge students">Students</span><span class="g-title">Students March in Uniform</span></div>
+        </div>
+
+        <div class="g-item" data-category="students" data-src="images/tochukwu.jpg" data-caption="Student Portrait">
+          <div class="g-thumb"><img src="images/tochukwu.jpg" alt="Student portrait" loading="lazy" />
+            <div class="g-overlay"><span class="g-overlay__title">Student Portrait</span></div>
+          </div>
+          <div class="g-label"><span class="g-badge students">Students</span><span class="g-title">Student Portrait</span></div>
+        </div>
+
+        <div class="g-item" data-category="students" data-src="images/wisdom.jpg" data-caption="Student Achievement">
+          <div class="g-thumb"><img src="images/wisdom.jpg" alt="Student achievement" loading="lazy" />
+            <div class="g-overlay"><span class="g-overlay__title">Student Achievement</span></div>
+          </div>
+          <div class="g-label"><span class="g-badge students">Students</span><span class="g-title">Student Achievement</span></div>
+        </div>
+
+        <!-- Events -->
+        <div class="g-item" data-category="events" data-src="images/images (4).jpeg" data-caption="Campus Event">
+          <div class="g-thumb"><img src="images/images (4).jpeg" alt="Campus event" loading="lazy" />
+            <div class="g-overlay"><span class="g-overlay__title">Campus Event</span></div>
+          </div>
+          <div class="g-label"><span class="g-badge events">Events</span><span class="g-title">Campus Event</span></div>
+        </div>
+
+        <div class="g-item" data-category="events" data-src="images/images.jpeg" data-caption="School Giving Event">
+          <div class="g-thumb"><img src="images/images.jpeg" alt="School giving event" loading="lazy" />
+            <div class="g-overlay"><span class="g-overlay__title">School Giving Event</span></div>
+          </div>
+          <div class="g-label"><span class="g-badge events">Events</span><span class="g-title">School Giving Event</span></div>
+        </div>
+
+        <div class="g-item" data-category="events" data-src="images/emeakaroha-foundation-school-2023-2024-019.jpg" data-caption="Graduation Ceremony 2023/2024">
+          <div class="g-thumb"><img src="images/emeakaroha-foundation-school-2023-2024-019.jpg" alt="Graduation ceremony" loading="lazy" />
+            <div class="g-overlay"><span class="g-overlay__title">Graduation Ceremony</span></div>
+          </div>
+          <div class="g-label"><span class="g-badge events">Events</span><span class="g-title">Graduation Ceremony 2023/2024</span></div>
+        </div>
+
+        <div class="g-item" data-category="events" data-src="images/emeakaroha-foundation-school-2023-2024-020.jpg" data-caption="Graduation Day 2023/2024">
+          <div class="g-thumb"><img src="images/emeakaroha-foundation-school-2023-2024-020.jpg" alt="Graduation day" loading="lazy" />
+            <div class="g-overlay"><span class="g-overlay__title">Graduation Day</span></div>
+          </div>
+          <div class="g-label"><span class="g-badge events">Events</span><span class="g-title">Graduation Day 2023/2024</span></div>
+        </div>
+
+        <div class="g-item" data-category="events" data-src="images/emeakaroha-foundation-school-2023-2024-034.jpg" data-caption="School Event 2023/2024">
+          <div class="g-thumb"><img src="images/emeakaroha-foundation-school-2023-2024-034.jpg" alt="School event" loading="lazy" />
+            <div class="g-overlay"><span class="g-overlay__title">School Event 2023/2024</span></div>
+          </div>
+          <div class="g-label"><span class="g-badge events">Events</span><span class="g-title">School Event 2023/2024</span></div>
+        </div>
+
+        <div class="g-item" data-category="events" data-src="images/schuljahr2022-2023-061d1d0-scaled-e1729595458450.jpg" data-caption="Special Visitors Day">
+          <div class="g-thumb"><img src="images/schuljahr2022-2023-061d1d0-scaled-e1729595458450.jpg" alt="Special visitors day" loading="lazy" />
+            <div class="g-overlay"><span class="g-overlay__title">Special Visitors Day</span></div>
+          </div>
+          <div class="g-label"><span class="g-badge events">Events</span><span class="g-title">Special Visitors Day</span></div>
+        </div>
+
+        <div class="g-item" data-category="events" data-src="images/social-gathering.jpg" data-caption="Social Gathering">
+          <div class="g-thumb"><img src="images/social-gathering.jpg" alt="Social gathering" loading="lazy" />
+            <div class="g-overlay"><span class="g-overlay__title">Social Gathering</span></div>
+          </div>
+          <div class="g-label"><span class="g-badge events">Events</span><span class="g-title">Social Gathering</span></div>
+        </div>
+
+        <!-- Sports -->
+        <div class="g-item" data-category="sports" data-src="images/emeakaroha-foundation-school-2023-2024-038.jpg" data-caption="Sports & Dance Display">
+          <div class="g-thumb"><img src="images/emeakaroha-foundation-school-2023-2024-038.jpg" alt="Sports and dance" loading="lazy" />
+            <div class="g-overlay"><span class="g-overlay__title">Sports &amp; Dance</span></div>
+          </div>
+          <div class="g-label"><span class="g-badge sports">Sports</span><span class="g-title">Sports &amp; Dance Display</span></div>
+        </div>
+
+        <div class="g-item" data-category="sports" data-src="images/recreation.jpg" data-caption="Recreation Activity">
+          <div class="g-thumb"><img src="images/recreation.jpg" alt="Recreation activity" loading="lazy" />
+            <div class="g-overlay"><span class="g-overlay__title">Recreation Activity</span></div>
+          </div>
+          <div class="g-label"><span class="g-badge sports">Sports</span><span class="g-title">Recreation Activity</span></div>
+        </div>
+
+      </div><!-- end photo grid -->
+
+      <div class="g-empty hidden" id="g-photo-empty">
+        <i class="fas fa-image"></i>
+        <p>No photos in this category yet.</p>
+        <span>Try a different filter.</span>
+      </div>
+
+    </section>
+
+    <!-- ══════════════ VIDEOS SECTION ══════════════ -->
+    <section id="videos-section" class="g-section hidden">
+
+      <p class="g-section-intro">
+        <i class="fas fa-film"></i> &nbsp;All school videos. Tap any to watch.
+      </p>
+
+      <div class="g-video-grid">
+
+        <div class="g-vcard" data-type="youtube" data-src="y692ErMw_LY" data-caption="School Anthem">
+          <div class="g-vcard__thumb">
+            <img src="https://img.youtube.com/vi/y692ErMw_LY/hqdefault.jpg" alt="School Anthem" loading="lazy" />
+            <div class="g-vcard__play"><i class="fas fa-play"></i></div>
+            <span class="g-vcard__badge"><i class="fab fa-youtube"></i> YouTube</span>
+          </div>
+          <div class="g-vcard__info">
+            <p class="g-vcard__title">School Anthem</p>
+            <p class="g-vcard__sub">Emeakaroha Foundation School</p>
+          </div>
+        </div>
+
+        <div class="g-vcard" data-type="youtube" data-src="RHYVXE_-JF8" data-caption="School Video 2">
+          <div class="g-vcard__thumb">
+            <img src="https://img.youtube.com/vi/RHYVXE_-JF8/hqdefault.jpg" alt="School Video 2" loading="lazy" />
+            <div class="g-vcard__play"><i class="fas fa-play"></i></div>
+            <span class="g-vcard__badge"><i class="fab fa-youtube"></i> YouTube</span>
+          </div>
+          <div class="g-vcard__info">
+            <p class="g-vcard__title">School Video 2</p>
+            <p class="g-vcard__sub">Emeakaroha Foundation School</p>
+          </div>
+        </div>
+
+        <div class="g-vcard" data-type="youtube" data-src="rcPL9Th4Fx4" data-caption="School Video 3">
+          <div class="g-vcard__thumb">
+            <img src="https://img.youtube.com/vi/rcPL9Th4Fx4/hqdefault.jpg" alt="School Video 3" loading="lazy" />
+            <div class="g-vcard__play"><i class="fas fa-play"></i></div>
+            <span class="g-vcard__badge"><i class="fab fa-youtube"></i> YouTube</span>
+          </div>
+          <div class="g-vcard__info">
+            <p class="g-vcard__title">School Video 3</p>
+            <p class="g-vcard__sub">Emeakaroha Foundation School</p>
+          </div>
+        </div>
+
+        <div class="g-vcard" data-type="youtube" data-src="h9BYOnC-nKg" data-caption="School Video 4">
+          <div class="g-vcard__thumb">
+            <img src="https://img.youtube.com/vi/h9BYOnC-nKg/hqdefault.jpg" alt="School Video 4" loading="lazy" />
+            <div class="g-vcard__play"><i class="fas fa-play"></i></div>
+            <span class="g-vcard__badge"><i class="fab fa-youtube"></i> YouTube</span>
+          </div>
+          <div class="g-vcard__info">
+            <p class="g-vcard__title">School Video 4</p>
+            <p class="g-vcard__sub">Emeakaroha Foundation School</p>
+          </div>
+        </div>
+
+        <div class="g-vcard" data-type="youtube" data-src="nNptNisGqrE" data-caption="School Video 5">
+          <div class="g-vcard__thumb">
+            <img src="https://img.youtube.com/vi/nNptNisGqrE/hqdefault.jpg" alt="School Video 5" loading="lazy" />
+            <div class="g-vcard__play"><i class="fas fa-play"></i></div>
+            <span class="g-vcard__badge"><i class="fab fa-youtube"></i> YouTube</span>
+          </div>
+          <div class="g-vcard__info">
+            <p class="g-vcard__title">School Video 5</p>
+            <p class="g-vcard__sub">Emeakaroha Foundation School</p>
+          </div>
+        </div>
+
+        <!-- Google Photos Videos -->
+    </section>
+
+    <!-- CTA -->
+<!--  <div class="g-cta">
+      <div class="g-cta__icon"><i class="fas fa-cloud-upload-alt"></i></div>
+      <div class="g-cta__text">
+        <h3>Want to add photos or videos?</h3>
+        <p>Contact the developers to upload new content.</p>
+      </div>
+      <a href="developers.html" class="g-cta__btn"><i class="fas fa-code"></i> Contact Developers</a>
+    </div>-->
+
+  </main>
+
+  <!-- FOOTER -->
+  <footer class="g-footer">
+    <div class="g-footer__grid">
+      <div class="g-footer__col">
+        <h3>Emeakaroha Foundation School</h3>
+        <p>Building strong academic foundations and nurturing future leaders through quality education and discipline.</p>
+      </div>
+      <div class="g-footer__col">
+        <h4>Quick Links</h4>
+        <ul>
+          <li><a href="index.html">Home</a></li>
+          <li><a href="index.html#programs">Programs</a></li>
+          <li><a href="gallery.html">Gallery</a></li>
+          <li><a href="news.html">News</a></li>
+          <li><a href="developers.html">Developers</a></li>
+        </ul>
+      </div>
+      <div class="g-footer__col">
+        <h4>Contact</h4>
+        <ul class="g-footer__contact">
+          <li><i class="fas fa-map-marker-alt"></i> Ikpenwafor, Ikperejere, Nigeria</li>
+          <li><i class="fas fa-phone"></i> +2348141972002</li>
+          <li><i class="fas fa-envelope"></i> info@emeakarohaschool.edu.ng</li>
+        </ul>
+      </div>
+      <div class="g-footer__col">
+        <h4>Follow Us</h4>
+        <div class="g-footer__socials">
+          <a href="#" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
+          <a href="#" aria-label="WhatsApp"><i class="fab fa-whatsapp"></i></a>
+          <a href="#" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+        </div>
+      </div>
+    </div>
+    <div class="g-footer__bottom">
+      <p>© 2026 Emeakaroha Foundation School. Built by the Developers Team.</p>
+    </div>
+  </footer>
+
+  <!-- IMAGE LIGHTBOX -->
+  <div class="g-lb" id="g-lb" role="dialog" aria-modal="true">
+    <button class="g-lb__close" id="g-lb-close"><i class="fas fa-times"></i></button>
+    <button class="g-lb__prev"  id="g-lb-prev"><i class="fas fa-chevron-left"></i></button>
+    <button class="g-lb__next"  id="g-lb-next"><i class="fas fa-chevron-right"></i></button>
+    <div class="g-lb__inner">
+      <div class="g-lb__spinner hidden" id="g-lb-spinner"><i class="fas fa-circle-notch fa-spin"></i></div>
+      <img class="g-lb__img" id="g-lb-img" src="" alt="" />
+      <p class="g-lb__caption" id="g-lb-caption"></p>
+      <p class="g-lb__counter"  id="g-lb-counter"></p>
+    </div>
+  </div>
+
+  <!-- VIDEO LIGHTBOX -->
+  <div class="g-vlb" id="g-vlb" role="dialog" aria-modal="true">
+    <button class="g-vlb__close" id="g-vlb-close"><i class="fas fa-times"></i></button>
+    <div class="g-vlb__inner">
+      <iframe class="g-vlb__frame" id="g-vlb-frame" src=""
+              allow="autoplay; fullscreen; picture-in-picture"
+              allowfullscreen></iframe>
+      <p class="g-vlb__caption" id="g-vlb-caption"></p>
+    </div>
+  </div>
+
+  <script src="theme.js"></script>
+  <script src="gallery.js"></script>
+
+</body>
+</html>

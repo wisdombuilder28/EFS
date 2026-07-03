@@ -1,0 +1,9 @@
+{
+  "name": "efs-website",
+  "version": "1.0.0",
+  "description": "Emeakaroha Foundation School Official Website",
+  "type": "module",
+  "dependencies": {
+    "web-push": "^3.6.7"
+  }
+}

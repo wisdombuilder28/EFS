@@ -1,0 +1,191 @@
+<!DOCTYPE html>   
+<html lang="en">      
+<head>      
+  <meta charset="UTF-8">     
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Developers | School Website</title>      
+  
+  
+    <link rel="stylesheet" href="nav.css" type="text/css" media="all" />
+    <link rel="stylesheet" href="developers.css" type="text/css" media="all" />
+    
+    <link rel="manifest" href="/manifest.json" />
+<meta name="theme-color" content="#191970" />
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+<meta name="apple-mobile-web-app-title" content="EFS" />
+<link rel="apple-touch-icon" href="IMG-20260326-WA0001~2.jpg" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+</head>
+
+<script>
+  if ('serviceWorker' in navigator) {
+    window.addEventListener('load', () => {
+      navigator.serviceWorker.register('/sw.js');
+    });
+  }
+</script>
+
+<body>      <!-- Navbar -->        <!-- Mobile menu toggle (hamburger) -->      <input type="checkbox" id="check" hidden>      
+<label for="check" class="ham" aria-label="Toggle menu">      
+    <span class="line line1"></span>      
+    <span class="line line2"></span>      
+    <span class="line line3"></span>      
+</label>      
+
+<div id="settingsModal" class="modal-overlay">
+  <div class="modal-content">
+    <div class="modal-header">
+      <h2>Settings</h2>
+       <button class="close-modal" aria-label="Close settings">&times;</button>
+    </div>
+    <div class="modal-body">
+      <h3>Appearance</h3>
+      <p class="text-muted">Choose how Emeakaroha Foundation School looks to you.</p>
+      <div class="theme-options">
+        <button class="theme-btn" data-theme="light">
+          <i class="fas fa-sun"></i> Light
+        </button>
+        <button class="theme-btn" data-theme="dark">
+          <i class="fas fa-moon"></i> Dark
+        </button>
+       
+      </div>
+    </div>
+  </div>
+</div>
+  
+  
+<!-- Sidebar menu -->
+    <nav class="menu" style="color: #ffffff;">
+      <ul>
+      <li><a href="index.html#top"><i class="fas fa-home"></i> Home</a></li>
+      <li><a href="index.html#about"><i class="fas fa-info-circle"></i> About</a></li>
+      <li><a href="index.html#programs"><i class="fas fa-graduation-cap"></i> Programs</a></li>
+      <li><a href="index.html#facilities"><i class="fas fa-building"></i> Facilities</a></li>
+      <li><a href="index.html#contact"><i class="fas fa-envelope"></i> Contact</a></li>
+      <li><a href="#" id="open-settings-link"><i class="fas fa-cog"></i> Setting</a></li>
+      <li><a href="developers.html"><i class="fas fa-code"></i> Developers</a></li>
+      <li class="nav-has-sub">
+        <span class="nav-sub-label"><i class="fas fa-comments"></i> ChatAI ▾</span>
+        <ul class="nav-sub">
+          <li><a href="AI.html"><i class="fas fa-robot"></i> Assistant Mode</a></li>
+          <li><a href="study.html"><i class="fas fa-book-open"></i> Study Mode</a></li>
+        </ul>
+      </li>
+      <li><a href="news.html#top"><i class="fas fa-newspaper"></i> News</a></li>
+      <li><a href="gallery.html"><i class="fas fa-images"></i> Gallery</a></li>
+    </ul>
+ </nav>
+  
+  
+    <div class="navbar-brand">
+      <img src="IMG-20260326-WA0001~2.jpg" class="logo">
+    </div>
+
+  
+  <!-- Develoers Section -->        <section class="developers-section">      
+    <h2>Meet the Developers</h2>      
+    <p class="dev-intro">      
+      This website was designed and developed by students passionate about technology.      
+    </p>    
+    <div class="developers-container">      
+  
+  <!-- Developer 1 -->      
+  <div class="developer-card">
+    <img src="IMG_20260317_205434_933~2.jpg" alt="Developer 1">
+    <h3>Ugochukwu Wisdom</h3>      
+    <span class="role">Frontend Developer/ backend support</span>      
+    <ul>      
+      <li>Built website layout and structure</li>      
+      <li>HTML, CSS, & JavaScript</li>     
+    </ul>      
+  </div>      
+  
+  <!-- Developer 2 -->
+  <div class="developer-card">
+    <img src="IMG-20260515-WA0004.jpg">
+    <h3>Ogoke Tochukwu</h3>
+    <span class="role"> Website host/ backend support</span>
+    <ul>
+      <li>Host the website </li> 
+      <li>HTML, CSS, & JavaScript</li>
+      <li>Web backend and CS fundamentals</li>
+    </ul>
+  </div>
+  
+</div>
+</section>
+<!-- Contact Developers -->
+<div class="dev-contact">
+  <h2>Message a Developer</h2>
+  <p>Do You have feedback or questions about the website? You can send us a direct message.</p>
+  <form id="devForm">
+    <select id="developer" required>
+      <option value="">Select Developer</option>
+      <option value="wisdom">Ugochukwu Wisdom</option>  
+      <option value="tochukwu">Ogoke Tochukwu</option>
+    </select>  
+    
+  <input   
+  type="text"   
+  id="senderName"   
+  placeholder="Your name"   
+  required>  
+
+<textarea   
+  id="message"   
+  placeholder="Type your message here..."   
+  required  
+></textarea>  
+
+<button type="submit">
+  <i class="fab fa-whatsapp"></i> 
+  Send via WhatsApp</button>
+
+  </form>  
+</div>  
+
+<script>
+document.getElementById("devForm").addEventListener("submit", function (e) {
+  e.preventDefault();
+
+  const dev = document.getElementById("developer").value;
+  const name = document.getElementById("senderName").value;
+  const msg = document.getElementById("message").value;
+
+  let phone = "";
+
+  if (dev === "wisdom") {
+    phone = "2347063376182";
+  } else if (dev === "tochukwu") {
+    phone = "2348033732253";
+  } else {
+    alert("Please select a developer");
+    return;
+  }
+
+  const text = `Hello, my name is ${name}.\n\n${msg}`;
+  const url = `https://wa.me/${phone}?text=${encodeURIComponent(text)}`;
+
+  window.open(url, "_blank");
+});
+</script>
+  <script src="image.js"></script>   
+  <script src="theme.js"></script>   
+  <script>
+    // ChatAI nav dropdown — tap/click to expand, click elsewhere to collapse
+    document.addEventListener('DOMContentLoaded', () => {
+      const item  = document.querySelector('.nav-has-sub');
+      const label = item?.querySelector('.nav-sub-label');
+      if (!item || !label) return;
+
+      label.addEventListener('click', (e) => { e.stopPropagation(); item.classList.toggle('open'); });
+      document.addEventListener('click', () => item.classList.remove('open'));
+      item.addEventListener('click', (e) => e.stopPropagation());
+      window.addEventListener('resize', () => item.classList.remove('open'));
+    });
+  </script>
+</body>
+</html>

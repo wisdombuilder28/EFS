@@ -1,0 +1,59 @@
+{
+  "name": "Emeakaroha Foundation School",
+  "short_name": "EFS",
+  "description": "Official website and app of Emeakaroha Foundation School — Excellence Is Possible",
+  "start_url": "/index.html",
+  "scope": "/",
+  "display": "standalone",
+  "orientation": "portrait-primary",
+  "background_color": "#191970",
+  "theme_color": "#191970",
+  "lang": "en",
+  "categories": ["education"],
+  "icons": [
+    {
+      "src": "IMG-20260326-WA0001~2.jpg",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "IMG-20260326-WA0001~2.jpg",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "News & Announcements",
+      "short_name": "News",
+      "description": "View the latest school news",
+      "url": "/news.html",
+      "icons": [{ "src": "IMG-20260326-WA0001~2.jpg", "sizes": "96x96" }]
+    },
+    {
+      "name": "Gallery",
+      "short_name": "Gallery",
+      "description": "Browse school photos and videos",
+      "url": "/gallery.html",
+      "icons": [{ "src": "IMG-20260326-WA0001~2.jpg", "sizes": "96x96" }]
+    },
+    {
+      "name": "AI Assistant",
+      "short_name": "ChatAI",
+      "description": "Chat with the school AI assistant",
+      "url": "/AI.html",
+      "icons": [{ "src": "IMG-20260326-WA0001~2.jpg", "sizes": "96x96" }]
+    }
+  ],
+  "screenshots": [
+    {
+      "src": "IMG-20260326-WA0001~2.jpg",
+      "sizes": "540x720",
+      "type": "image/png",
+      "form_factor": "narrow",
+      "label": "Emeakaroha Foundation School Home"
+    }
+  ]
+}

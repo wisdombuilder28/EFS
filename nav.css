@@ -1,0 +1,253 @@
+.ham {
+  width: 40px;
+  height: 40px;
+  background: var(--primary-dark);
+  border-radius: 5px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  z-index: 300;
+  position: fixed;
+  top: 15px;
+  left: 20px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.ham:hover {
+  background: var(--accent);
+}
+
+.ham .line {
+  width: 25px;
+  height: 3px;
+  background: #fff;
+  margin: 3px 0;
+  border-radius: 3px;
+  transition: all 0.4s ease;
+  transform-origin: center;
+}
+
+#check:checked ~ .ham .line1 {
+  transform: translateY(9px) rotate(45deg);
+}
+#check:checked ~ .ham .line2 {
+  opacity: 0;
+}
+#check:checked ~ .ham .line3 {
+  transform: translateY(-9px) rotate(-45deg);
+}
+
+/* --- Menu (sidebar) – improved for desktop --- */
+.menu {
+  display: flex;
+  flex-direction: column;
+  width: 260px;
+  height: 100vh;
+  position: fixed;
+  top: 0;
+  left: -280px;  /* hidden on mobile */
+  z-index: 200;
+  background-color: #191970;
+  transition: left 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  padding-top: 70px;
+  box-shadow: 5px 0 15px rgba(0,0,0,0.2);
+}
+
+#check:checked ~ .menu {
+  left: 0;
+}
+
+.menu ul {
+  list-style: none;
+  text-align: left;
+  padding: 0 20px;
+}
+
+.menu li {
+  margin: 1.2rem 0;
+}
+
+.menu a {
+  color: var(--text-color);
+  text-decoration: none;
+  font-size: 1.1rem;
+  font-weight: 500;
+  transition: all 0.2s;
+  display: block;
+  padding: 8px 12px;
+  border-radius: 8px;
+}
+
+.menu a:hover {
+  background: var(--primary-dark);
+  color: white;
+  transform: translateX(5px);
+}
+
+/* Hide openmenu/closemenu labels if any left (cleanup) */
+.openmenu, .closemenu {
+    display: none;
+}
+
+/* ── ChatAI dropdown — mobile/base styles (must come BEFORE desktop media query) ── */
+.nav-has-sub {
+  position: relative;
+}
+.nav-sub-label {
+  color: var(--text-color);
+  font-size: 1.1rem;
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 12px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background 0.2s;
+  user-select: none;
+}
+.nav-sub-label:hover {
+  background: var(--primary-dark);
+  color: white;
+  transform: translateX(5px);
+}
+/* Sub-items hidden by default, revealed by JS adding .open */
+.nav-sub {
+  list-style: none !important;
+  padding: 0 0 0 24px !important;
+  margin: 0 !important;
+  display: none !important;
+}
+.nav-has-sub.open .nav-sub {
+  display: block !important;
+}
+.nav-sub li { margin: .5rem 0; }
+.nav-sub li a {
+  font-size: .95rem !important;
+  padding: 6px 12px !important;
+  color: rgba(255,255,255,0.88) !important;
+  display: flex;
+  align-items: center;
+  gap: 7px;
+}
+.nav-sub li a:hover {
+  background: rgba(255,255,255,.15) !important;
+  color: #ffffff !important;
+  transform: translateX(4px);
+}
+
+/* ── DESKTOP NAV (≥ 769px) ──────────────────────────────────────────────── */
+@media (min-width: 768px) {
+
+  /* 1. Hide the hamburger — desktop uses the always-visible top navbar */
+  .ham { display: none !important; }
+
+  /* 2. Turn .menu into a fixed horizontal navbar pinned to the top */
+  .menu {
+    position: fixed !important;
+    top: 0 !important;
+    left: 0 !important;        /* always visible — override the slide-in default */
+    right: 0 !important;
+    width: 100% !important;
+    height: 60px !important;
+    flex-direction: row !important;
+    align-items: center !important;
+    padding: 0 1.5rem !important;
+    padding-top: 0 !important;
+    background: #191970 !important;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.3) !important;
+    z-index: 200 !important;
+    overflow: visible !important;
+  }
+
+  /* 3. Nav list — horizontal row, offset from logo on the left */
+  .menu ul {
+    display: flex !important;
+    flex-direction: row !important;
+    align-items: center !important;
+    gap: 0.1rem !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    flex-wrap: nowrap !important;
+  }
+
+  .menu li { margin: 0 !important; }
+
+  /* 4. Nav links — white, compact, pill hover */
+  .menu a {
+    color: #ffffff !important;
+    font-size: 0.82rem !important;
+    font-weight: 500 !important;
+    padding: 6px 9px !important;
+    border-radius: 6px !important;
+    white-space: nowrap !important;
+    display: flex !important;
+    align-items: center !important;
+    gap: 4px !important;
+    transition: background 0.2s !important;
+  }
+  .menu a:hover {
+    background: rgba(255,255,255,0.18) !important;
+    color: #ffffff !important;
+    transform: none !important;
+  }
+  .menu a i { font-size: 0.82rem !important; }
+
+  /* 5. ChatAI dropdown label — same look as other links */
+  .nav-sub-label {
+    color: #ffffff !important;
+    font-size: 0.82rem !important;
+    padding: 6px 9px !important;
+    border-radius: 6px !important;
+    white-space: nowrap !important;
+    gap: 4px !important;
+    transform: none !important;
+  }
+  .nav-sub-label:hover {
+    background: rgba(255,255,255,0.18) !important;
+    color: #ffffff !important;
+    transform: none !important;
+  }
+  .nav-sub-label i { font-size: 0.82rem !important; }
+
+  /* 6. ChatAI dropdown — hidden by default, drops below navbar when .open is added */
+  .nav-has-sub { position: relative !important; }
+  .menu .nav-sub,
+  .nav-sub {
+    display: none !important;       /* hidden until ChatAI is tapped */
+    position: absolute !important;
+    top: calc(100% + 4px) !important;
+    left: 0 !important;
+    width: 180px !important;
+    background: #1a237e !important;
+    border-radius: 8px !important;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.35) !important;
+    padding: 6px 0 !important;
+    z-index: 300 !important;
+  }
+  .nav-has-sub.open .nav-sub {
+    display: block !important;      /* shown only when JS adds .open */
+  }
+  .nav-sub li { margin: 0 !important; }
+  .nav-sub li a {
+    color: #ffffff !important;
+    font-size: 0.87rem !important;
+    padding: 9px 16px !important;
+    border-radius: 0 !important;
+    display: flex !important;
+    align-items: center !important;
+    gap: 7px !important;
+  }
+  .nav-sub li a:hover {
+    background: rgba(255,255,255,0.15) !important;
+    color: #ffffff !important;
+    transform: none !important;
+  }
+
+  /* 7. Nudge page body down so content is not hidden under the 60px navbar */
+  body { padding-top: 60px !important; }
+}
+
+

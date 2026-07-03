@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Real AI Chatbot</title>
+  <link rel="manifest" href="/manifest.json" />
+<meta name="theme-color" content="#191970" />
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+<meta name="apple-mobile-web-app-title" content="EFS" />
+<link rel="apple-touch-icon" href="IMG-20260326-WA0001~2.jpg" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <link rel="stylesheet" href="nav.css" />
+  <link rel="stylesheet" href="AI.css" />
+</head>
+
+<script>
+  if ('serviceWorker' in navigator) {
+    window.addEventListener('load', () => {
+      navigator.serviceWorker.register('/sw.js');
+    });
+  }
+</script>
+
+<body>
+  <input type="checkbox" id="check" hidden>
+  <label for="check" class="ham" aria-label="Toggle Menu">
+      <span class="line line1"></span>
+      <span class="line line2"></span>
+      <span class="line line3"></span>
+  </label>
+
+  <nav class="menu">
+    <ul>
+      <li><a href="index.html#top"><i class="fas fa-home"></i> Home</a></li>
+      <li><a href="index.html#about"><i class="fas fa-info-circle"></i> About</a></li>
+      <li><a href="index.html#programs"><i class="fas fa-graduation-cap"></i> Programs</a></li>
+      <li><a href="index.html#facilities"><i class="fas fa-building"></i> Facilities</a></li>
+      <li><a href="index.html#contact"><i class="fas fa-envelope"></i> Contact</a></li>
+      <li><a href="#" id="open-settings-link"><i class="fas fa-cog"></i> Setting</a></li>
+      <li><a href="developers.html"><i class="fas fa-code"></i> Developers</a></li>
+      
+        <li class="nav-has-sub">
+          <span class="nav-sub-label"><i class="fas fa-comments"></i> ChatAI ▾</span>
+          <ul class="nav-sub">
+            <li><a href="AI.html"><i class="fas fa-robot"></i> Assistant Mode</a></li>
+            <li><a href="study.html"><i class="fas fa-book-open"></i> Study Mode</a></li>
+          </ul>
+        </li>
+        
+      <li><a href="news.html#top"><i class="fas fa-newspaper"></i> News</a></li>
+      <li><a href="gallery.html"><i class="fas fa-images"></i> Gallery</a></li>
+    </ul>
+  </nav>
+
+  <div id="settingsModal" class="modal-overlay">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2>Settings</h2>
+        <button class="close-modal" aria-label="Close settings">&times;</button>
+      </div>
+      <div class="modal-body">
+        <h3>Appearance</h3>
+        <p class="text-muted">Choose how the interface looks to you.</p>
+        <div class="theme-options">
+          <button class="theme-btn" data-theme="light"><i class="fas fa-sun"></i> Light</button>
+          <button class="theme-btn" data-theme="dark"><i class="fas fa-moon"></i> Dark</button>
+        <!--  <button class="theme-btn" data-theme="system"><i class="fas fa-desktop"></i> System</button>-->
+        </div>
+      </div>
+    </div>
+  </div>
+        
+  <div class="container">
+    <header class="app-header">
+      <h1 class="heading">Hello, there</h1>
+      <h4 class="sub-heading"> Hello what can j help you with?</h4>
+    </header>
+      
+    <ul class="suggestions">
+      <li class="suggestions-item">
+        <p class="text">Help me create a study timetable for my upcoming exams.</p>
+        <i class="icon fas fa-calendar-alt"></i>
+      </li>
+      <li class="suggestions-item">
+        <p class="text">Explain the process of photosynthesis in simple terms.</p>
+        <i class="icon fas fa-trophy"></i>
+      </li>
+      <li class="suggestions-item">
+        <p class="text">Give me some interesting topic ideas for my term essay.</p>
+        <i class="icon fas fa-file-alt"></i>
+      </li>
+      <li class="suggestions-item">
+        <p class="text">What are the best study techniques for memorizing formulas?</p>
+        <i class="icon fas fa-brain"></i>
+      </li>
+    </ul>
+      
+    <div class="chats-container" role="log" aria-live="polite"></div>
+    
+    <div class="prompt-container">
+      <div class="prompt-wrapper">
+        
+        <div class="external-controls">
+          <button id="delete-chats-btn" aria-label="Clear chat" title="Clear Chat">
+            <i class="fas fa-trash"></i>
+          </button>
+        </div>
+
+        <form action="#" class="prompt-form">
+          <textarea placeholder="Ask AI..." class="prompt-input" autocomplete="off" rows="1"></textarea>
+          
+          <div class="prompt-actions">
+            <div class="file-upload-wrapper">
+              <img src="#" class="file-preview" alt="File preview" style="display: none;" />
+              <div class="file-icon-display" style="display: none;">
+                <i class="fas fa-file-pdf"></i>
+              </div>
+
+              <input id="file-input" type="file" accept="image/*, .pdf" hidden />
+              
+              <button id="cancel-file-btn" type="button" title="Cancel File">
+                <i class="fas fa-times"></i>
+              </button>
+              <button id="add-file-btn" type="button" title="Attach File">
+                <i class="fas fa-plus"></i>
+              </button>
+            </div>
+            
+            <button id="stop-response-btn" type="button" title="Stop">
+              <i class="fas fa-stop-circle"></i>
+            </button>
+            <button id="send-prompt-btn" type="submit" title="Send">
+              <i class="fas fa-paper-plane"></i>
+            </button>
+          </div>
+        </form>
+
+      </div>
+      
+      <p class="disclaimer-text">AI can make mistakes, so double-check it.</p>
+    </div>
+  </div>
+
+  <script src="AI.js"></script>
+  <script src="theme.js"></script>
+  <script>
+    // ChatAI nav dropdown — tap/click to expand, click elsewhere to collapse
+    document.addEventListener('DOMContentLoaded', function () {
+      const item  = document.querySelector('.nav-has-sub');
+      const label = item?.querySelector('.nav-sub-label');
+      if (!item || !label) return;
+
+      label.addEventListener('click', (e) => {
+        e.stopPropagation();
+        item.classList.toggle('open');
+      });
+
+      document.addEventListener('click', () => item.classList.remove('open'));
+      item.addEventListener('click', (e) => e.stopPropagation());
+      window.addEventListener('resize', () => item.classList.remove('open'));
+    });
+  </script>
+  <script>
+    // Auto-resize textarea + fix Enter key on mobile
+    document.addEventListener('DOMContentLoaded', function () {
+      const ta   = document.querySelector('.prompt-input');
+      const form = document.querySelector('.prompt-form');
+      if (!ta) return;
+
+      // Auto-grow as user types
+      ta.addEventListener('input', function () {
+        this.style.height = 'auto';
+        this.style.height = Math.min(this.scrollHeight, 130) + 'px';
+      });
+
+      // Desktop: Enter sends | Shift+Enter = new line
+      // Mobile: Enter = new line only, send via button
+      ta.addEventListener('keydown', function (e) {
+        if (e.key === 'Enter') {
+          const isMobile = /Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
+          if (isMobile) return; // let OS handle it naturally
+          if (!e.shiftKey) {
+            e.preventDefault();
+            form?.requestSubmit();
+          }
+        }
+      });
+    });
+  </script>
+</body>
+</html>

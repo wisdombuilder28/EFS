@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Study AI — Emeakaroha Foundation School</title>
+
+  <!-- Font Awesome (same as rest of school website) -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+        integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+  <!-- School nav styles -->
+  <link rel="stylesheet" href="nav.css" />
+
+  <!-- Study AI own styles -->
+  <link rel="stylesheet" href="study.css" />
+<link rel="manifest" href="/manifest.json" />
+<meta name="theme-color" content="#191970" />
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+<meta name="apple-mobile-web-app-title" content="EFS" />
+<link rel="apple-touch-icon" href="IMG-20260326-WA0001~2.jpg" />
+  <!-- MathJax config — must come BEFORE the MathJax script -->
+  <script>
+    MathJax = {
+      tex: {
+        inlineMath:  [['\\(', '\\)']],
+        displayMath: [['\\[', '\\]']]
+      }
+    };
+  </script>
+
+  <!-- Third-party libraries -->
+  <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/dompurify/dist/purify.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
+  <!-- Theme must apply before paint to prevent flash -->
+  <script>
+    (function () {
+      const t = localStorage.getItem('theme') || 'dark';
+      document.documentElement.classList.toggle('light-theme-html', t === 'light');
+      if (t === 'light') document.body && document.body.classList.add('light-theme');
+    })();
+  </script>
+</head>
+
+<script>
+  if ('serviceWorker' in navigator) {
+    window.addEventListener('load', () => {
+      navigator.serviceWorker.register('/sw.js');
+    });
+  }
+</script>
+
+<body>
+  <!-- ── HAMBURGER (same pattern as AI.html / index.html) ──────────────── -->
+  <input type="checkbox" id="check" hidden>
+  <label for="check" class="ham" aria-label="Toggle Menu">
+    <span class="line line1"></span>
+    <span class="line line2"></span>
+    <span class="line line3"></span>
+  </label>
+
+  <!-- ── SIDEBAR NAV ───────────────────────────────────────────────────── -->
+  <nav class="menu">
+    <ul>
+      <li><a href="index.html#top"><i class="fas fa-home"></i> Home</a></li>
+      <li><a href="index.html#about"><i class="fas fa-info-circle"></i> About</a></li>
+      <li><a href="index.html#programs"><i class="fas fa-graduation-cap"></i> Programs</a></li>
+      <li><a href="index.html#facilities"><i class="fas fa-building"></i> Facilities</a></li>
+      <li><a href="index.html#contact"><i class="fas fa-envelope"></i> Contact</a></li>
+      <li><a href="#" id="open-settings-link"><i class="fas fa-cog"></i> Setting</a></li>
+      <li><a href="developers.html"><i class="fas fa-code"></i> Developers</a></li>
+      <!-- ChatAI with sub-links -->
+      <li class="nav-has-sub">
+        <span class="nav-sub-label"><i class="fas fa-comments"></i> ChatAI</span>
+        <ul class="nav-sub">
+          <li><a href="AI.html"><i class="fas fa-robot"></i> Assistant Mode</a></li>
+          <li><a href="study.html" class="nav-active"><i class="fas fa-book-open"></i> Study Mode</a></li>
+        </ul>
+      </li>
+      
+      <li><a href="news.html"><i class="fas fa-newspaper"></i> News</a></li>
+      <li><a href="gallery.html"><i class="fas fa-images"></i> Gallery</a></li>
+    </ul>
+  </nav>
+
+  <!-- ── SETTINGS MODAL (same as AI.html) ─────────────────────────────── -->
+  <div id="settingsModal" class="modal-overlay">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2>Settings</h2>
+        <button class="close-modal" aria-label="Close settings">&times;</button>
+      </div>
+      <div class="modal-body">
+        <h3>Appearance</h3>
+        <p class="text-muted">Choose how the interface looks to you.</p>
+        <div class="theme-options">
+          <button class="theme-btn" data-theme="light"><i class="fas fa-sun"></i> Light</button>
+          <button class="theme-btn" data-theme="dark"><i class="fas fa-moon"></i> Dark</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── PAGE HEADER ───────────────────────────────────────────────────── -->
+  <header class="study-header">
+    <div class="study-brand">
+      <span class="study-icon">📚</span>
+      <div>
+        <h1 class="study-title">EFS Study AI</h1>
+        <p class="study-sub">WAEC &amp; JAMB Study Assistant</p>
+      </div>
+    </div>
+    <select id="subject" aria-label="Select subject" required>
+      <option value="">— Select Subject —</option>
+      <option value="english">English Language</option>
+      <option value="mathematics">General Mathematics</option>
+      <option value="further_maths">Further Mathematics</option>
+      <option value="physics">Physics</option>
+      <option value="chemistry">Chemistry</option>
+      <option value="biology">Biology</option>
+      <option value="agric_science">Agricultural Science</option>
+      <option value="civic_edu">Civic Education</option>
+      <option value="literature">Literature in English</option>
+      <option value="government">Government</option>
+      <option value="economics">Economics</option>
+      <option value="commerce">Commerce</option>
+      <option value="financial_accounting">Financial Accounting</option>
+      <option value="digi_tech">Digital Technology</option>
+      <option value="geography">Geography</option>
+      <option value="crs">Christian Religious Studies</option>
+      <option value="igbo">Igbo Language</option>
+    </select>
+  </header>
+
+  <!-- ── CHAT AREA ─────────────────────────────────────────────────────── -->
+  <main id="chat" aria-live="polite">
+    <div class="welcome">
+      <h2>Welcome 👋</h2>
+      <p>Pick a subject above and ask any academic question.<br>I'll guide you WAEC-style.</p>
+      <div class="welcome-chips">
+        <span class="chip" onclick="askChip(this)">Explain photosynthesis</span>
+        <span class="chip" onclick="askChip(this)">Solve a quadratic equation</span>
+        <span class="chip" onclick="askChip(this)">What is osmosis?</span>
+        <span class="chip" onclick="askChip(this)">Write a formal letter</span>
+      </div>
+    </div>
+  </main>
+
+  <!-- ── INPUT BAR ─────────────────────────────────────────────────────── -->
+  <form class="chat-Area" onsubmit="event.preventDefault();">
+
+    <!-- File preview shown when file is attached -->
+    <div class="study-file-preview hidden" id="study-file-preview">
+      <img id="study-img-preview" src="" alt="Preview" />
+      <span id="study-file-name"></span>
+      <button type="button" id="study-cancel-file" aria-label="Remove file">
+        <i class="fas fa-times"></i>
+      </button>
+    </div>
+
+    <div class="study-input-row">
+      <!-- Attach file button -->
+      <button type="button" id="study-attach-btn" aria-label="Attach file or image">
+        <i class="fas fa-plus"></i>
+      </button>
+      <input type="file" id="study-file-input" accept="image/*, .pdf" hidden />
+
+      <textarea
+        id="user-input"
+        class="User-Input"
+        placeholder="Ask any academic question…"
+        autocomplete="off"
+        rows="1"
+      ></textarea>
+
+      <button id="btn" type="submit" aria-label="Send">
+        <svg class="btn-icon" viewBox="0 0 24 24" width="20" height="20" fill="none"
+             stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M5 12h14M13 6l6 6-6 6"/>
+        </svg>
+      </button>
+    </div>
+
+  </form>
+
+  <p class="study-disclaimer">AI can make mistakes — always verify from your teachers and textbook.</p>
+
+  <!-- ── SCRIPTS ───────────────────────────────────────────────────────── -->
+  <script src="theme.js" defer></script>
+  <script type="module" src="study/app.js"></script>
+
+  <script>
+    // ── Study AI File Upload ─────────────────────────────────────────────────
+    window.studyAttachedFile = null;
+
+    document.addEventListener('DOMContentLoaded', function () {
+      const attachBtn   = document.getElementById('study-attach-btn');
+      const fileInput   = document.getElementById('study-file-input');
+      const cancelBtn   = document.getElementById('study-cancel-file');
+      const previewWrap = document.getElementById('study-file-preview');
+      const imgPreview  = document.getElementById('study-img-preview');
+      const fileNameEl  = document.getElementById('study-file-name');
+
+      attachBtn?.addEventListener('click', () => fileInput.click());
+
+      fileInput?.addEventListener('change', function () {
+        const file = this.files[0];
+        if (!file) return;
+        window.studyAttachedFile = file;
+        fileNameEl.textContent   = file.name;
+        previewWrap.classList.remove('hidden');
+        if (file.type.startsWith('image/')) {
+          const reader = new FileReader();
+          reader.onload = (e) => { imgPreview.src = e.target.result; imgPreview.style.display = 'block'; };
+          reader.readAsDataURL(file);
+        } else {
+          imgPreview.style.display = 'none';
+        }
+      });
+
+      cancelBtn?.addEventListener('click', function () {
+        window.studyAttachedFile = null;
+        fileInput.value          = '';
+        previewWrap.classList.add('hidden');
+        imgPreview.src           = '';
+      });
+    });
+  </script>
+
+  <script>
+    // ── Welcome chip click ──────────────────────────────────────────────────
+    function askChip(el) {
+      const input = document.getElementById('user-input');
+      if (input) {
+        input.value = el.textContent;
+        input.focus();
+      }
+    }
+
+    // ── Textarea auto-resize ────────────────────────────────────────────────
+    // Expands as the user types, collapses back when cleared
+    document.addEventListener('DOMContentLoaded', function () {
+      const ta = document.getElementById('user-input');
+      if (ta) {
+        ta.addEventListener('input', function () {
+          this.style.height = 'auto';
+          this.style.height = Math.min(this.scrollHeight, 130) + 'px';
+        });
+
+        // Desktop: Enter sends | Shift+Enter = new line
+        // Mobile: Enter = new line — send via button only
+        ta.addEventListener('keydown', function (e) {
+          if (e.key === 'Enter') {
+            const isMobile = /Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
+            if (isMobile) return;
+            if (!e.shiftKey) {
+              e.preventDefault();
+              document.getElementById('btn').click();
+            }
+          }
+        });
+      }
+    });
+
+    // ── ChatAI nav dropdown toggle ──────────────────────────────────────────
+    // Tapping "ChatAI" shows/hides the Assistant Mode & Study Mode sub-links.
+    // Tapping anywhere else on the page collapses it.
+    document.addEventListener('DOMContentLoaded', function () {
+      const chatAIItem = document.querySelector('.nav-has-sub');
+      const label      = chatAIItem ? chatAIItem.querySelector('.nav-sub-label') : null;
+
+      if (label) {
+        label.addEventListener('click', function (e) {
+          e.stopPropagation();
+          chatAIItem.classList.toggle('open');
+        });
+      }
+
+      // Collapse when clicking anywhere else
+      document.addEventListener('click', function () {
+        if (chatAIItem) chatAIItem.classList.remove('open');
+      });
+
+      // Prevent clicks inside the nav-has-sub from collapsing it
+      if (chatAIItem) {
+        chatAIItem.addEventListener('click', function (e) {
+          e.stopPropagation();
+        });
+      }
+    });
+  </script>
+
+</body>
+</html>

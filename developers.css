@@ -1,0 +1,357 @@
+/* ==========================================
+   DEVELOPERS PAGE - ISOLATED MASTER (PREMIUM DARK MODE)
+   ========================================== */
+
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap");
+
+:root {
+  --primary-dark: #191970;
+  --accent: #32CD32;
+  --bg-page:  #f4f6fb;
+  --card-bg: rgba(42, 55, 192, 0.2);
+  --text: #DDE0FF;
+  --text-main: #000;
+  --text-muted: #555; /* NEW: Adapts text */
+  --input-bg: #fff;
+  --input-border: #ccc; /* NEW: Adapts borders */
+  --dev-con: #BABDDC;
+  --role-color: #0816B4; /* NEW: Adapts role text */
+}
+
+body.dark-mode {
+  --bg-page:    #0f1535;          /* deep navy, not pitch black */
+  --card-bg:    rgba(255,255,255,0.06);  /* subtle glass card */
+  --text:       #e2e8ff;          /* bright enough to read on dark bg */
+  --text-main:  #f0f4ff;          /* white-ish main text */
+  --text-muted: #9ba8c8;          /* soft blue-gray, still readable */
+  --input-bg:   #1a2240;
+  --input-border: rgba(255,255,255,0.18);
+  --dev-con:    rgba(100,120,220,0.18);  /* visible card border tint */
+  --role-color: #87CEFA;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "Poppins", sans-serif;
+}
+
+body {
+  background-color: var(--bg-page);
+  color: var(--text-main);
+  transition: background-color 0.4s ease, color 0.4s ease; /* Smoother fade */
+}
+
+/* --- 1. THE NAVBAR --- */
+.ham {
+  width: 45px;
+  height: 45px;
+  background: var(--primary-dark);
+  border-radius: 8px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  position: fixed;
+  top: 15px;
+  left: 20px;
+  cursor: pointer;
+}
+
+.ham .line {
+  width: 25px; height: 3px; background: #fff; margin: 3px 0; transition: 0.4s;
+}
+
+#check:checked ~ .ham .line1 { transform: translateY(9px) rotate(45deg); }
+#check:checked ~ .ham .line2 { opacity: 0; }
+#check:checked ~ .ham .line3 { transform: translateY(-9px) rotate(-45deg); }
+
+.menu {
+  position: fixed; top: 0; left: -300px; width: 280px; height: 100vh;
+  background: var(--primary-dark); z-index: 999; transition: 0.4s; padding-top: 80px;
+}
+
+#check:checked ~ .menu { left: 0; }
+.menu ul { list-style: none; padding: 0 20px; }
+.menu li { margin: 1rem 0; }
+.menu a { color: #fff; text-decoration: none; font-size: 1.1rem; display: block; padding: 10px; }
+
+
+
+/* --- 2. SETTINGS MODAL --- */
+.modal-overlay {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0,0,0,0.6);
+  backdrop-filter: blur(4px);
+  z-index: 1000;
+  justify-content: center;
+  align-items: center;
+}
+
+.modal-content {
+  background: #1a2260;            /* slightly lighter than nav so it pops */
+  border: 1px solid rgba(255,255,255,0.15);
+  border-radius: 16px;
+  max-width: 400px;
+  width: 90%;
+  padding: 24px;
+  color: #e8ecff;                 /* always bright white-ish text in modal */
+}
+
+.modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+}
+.modal-header h2,
+.modal-content h3,
+.modal-content p {
+  color: #e8ecff !important;    /* force readable text for all modal copy */
+}
+
+.close-modal {
+  background: none;
+  border: none;
+  font-size: 28px;
+  cursor: pointer;
+  color: #ffffff;               /* always white so it's never invisible */
+  opacity: 0.85;
+  transition: opacity 0.2s;
+}
+.close-modal:hover { opacity: 1; }
+
+.theme-options {
+  display: flex;
+  gap: 12px;
+  margin-top: 20px;
+  flex-wrap: wrap;
+}
+
+.theme-btn {
+  flex: 1;
+  padding: 10px;
+  background: rgba(255,255,255,0.10);
+  border: 1px solid rgba(255,255,255,0.25);
+  border-radius: 8px;
+  cursor: pointer;
+  transition: 0.2s;
+  color: #ffffff;               /* always white text on dark modal */
+  font-size: 0.95rem;
+  font-weight: 500;
+}
+
+.theme-btn:hover {
+  background: var(--accent);
+  color: white;
+}
+
+/* ===== BASE (Desktop first) ===== */
+.navbar-brand {
+  display: flex; align-items: center; gap: 12px; position: fixed;
+  top: 62px; left: 10px; height: auto; z-index: 250; background: transparent; border: none;
+}
+
+.navbar-brand .logo {
+  height: 75px; width: 75px; border-radius: 50%; box-shadow: 0 2px 8px rgba(0,0,0,0.25);
+  object-fit: cover; padding: 2px;
+}
+
+/* Mobile: logo top-right corner, large, floating over the hero */
+@media (max-width: 768px) {
+  .navbar-brand {
+    display: flex !important;
+    top: 10px !important;
+    left: auto !important;
+    right: 2px !important;
+    height: auto !important;
+    
+  }
+  .navbar-brand .logo {
+    height: 110px !important;
+    width: 90px !important;
+    border-top-left-radius: 60px;
+    border-top-right-radius: 60px;
+    border-bottom-left-radius: 60px;
+    border-bottom-right-radius: 60px;
+  }
+}
+
+
+
+/* --- 3. DEVELOPERS SECTION (Cleaned up duplicates & hardcoded backgrounds) --- */
+.developers-section {
+  padding: 100px 20px 60px;
+  text-align: center;
+  background: transparent; /* FIXED: Let the body background shine through */
+}
+
+.developers-section h2 {
+  font-size: 2.2rem;
+  margin-bottom: 12px;
+}
+
+.dev-intro {
+  max-width: 720px;
+  margin: 0 auto 50px;
+  color: var(--text-muted); /* FIXED: Adapts to theme */
+  font-size: 1rem;
+  line-height: 1.6;
+}
+
+.developers-container {
+  max-width: 1000px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 1fr; 
+  gap: 50px;
+  background-color: var(--dev-con);
+  border-radius: 24px;
+  padding: 20px;
+}
+
+@media (min-width: 900px) {
+  .developers-container { grid-template-columns: repeat(2, 1fr); padding: 40px; }
+}
+
+/* --- 4. DEVELOPER CARD --- */
+.developer-card {
+  background: var(--card-bg);
+  border-radius: 22px;
+  padding: 25px;
+  display: flex;
+  flex-direction: column;
+  transition: transform 0.35s ease, box-shadow 0.35s ease;
+}
+
+.developer-card:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 18px 35px rgba(0,0,0,0.18);
+}
+
+.developer-card img {
+  width: 100%;  
+  height: 420px; 
+  object-fit: contain; 
+  border-radius: 20px;
+  margin: 0 auto 30px;
+  display: block;
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.25);
+  border: 1px solid rgba(255,255,255,0.2);
+}
+
+.developer-card img:hover {
+  transform: scale(1.05); /* Softer scale */
+  box-shadow: 0 30px 70px rgba(0, 0, 0, 0.35);
+}
+
+.developer-card h3 {
+  margin: 18px 20px 4px;
+  font-size: 1.4rem;
+}
+
+.developer-card .role {
+  margin: 0 20px 12px;
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: var(--role-color); /* FIXED: Blue in light, Sky Blue in dark */
+  display: block;
+}
+
+.developer-card ul {
+  margin: 0 20px;
+  padding-left: 18px;
+  text-align: left;
+  font-size: 0.95rem;
+}
+
+.developer-card ul li { margin-bottom: 6px; line-height: 1.5; }
+
+/* --- 5. THE MESSAGE SECTION --- */
+.dev-contact {
+  margin-top: 100px;
+  width: 100%; 
+  max-width: 640px; 
+  margin-left: auto;
+  margin-right: auto;
+  text-align: center;
+  padding-bottom: 60px;
+}
+
+.dev-contact h2 { margin-bottom: 10px; }
+
+.dev-contact p {
+  margin-bottom: 30px;
+  color: var(--text-muted); /* FIXED: Adapts to theme */
+}
+
+.dev-contact form {
+  display: flex; flex-direction: column; gap: 18px;
+}
+
+.dev-contact select,
+.dev-contact input,
+.dev-contact textarea {
+  width: calc(100% - 2rem); 
+  padding: 16px;
+  border-radius: 12px;
+  border: 1px solid var(--input-border); /* FIXED: Adapts to theme */
+  background: var(--input-bg);
+  color: var(--text-main);
+  font-size: 1rem;
+  margin-left: 1rem;
+  margin-right: 1rem;
+}
+
+.dev-contact textarea {
+  min-height: 130px; 
+  resize: vertical;
+}
+
+.dev-contact button {
+  background: #0816B4;
+  color: #fff;
+  border: none;
+  padding: 16px;
+  border-radius: 14px;
+  font-size: 1.1rem;
+  margin: 1rem;
+  cursor: pointer;
+  transition: background 0.3s ease, transform 0.2s ease;
+}
+
+.dev-contact button:hover {
+  background: var(--accent);
+  transform: translateY(-2px);
+}
+
+/* --- RESPONSIVE ADJUSTMENTS --- */
+@media (max-width: 900px) {
+  .developer-card img { height: 340px; }
+}
+
+@media (max-width: 480px) {
+  .developer-card img { height: 280px; }
+  .developer-card h3 { font-size: 1.25rem; }
+}
+/* ── Desktop nav: let nav.css horizontal navbar take over ───────────────── */
+@media (min-width: 768px) {
+  .ham  { display: none !important; }
+  .menu {
+    /* nav.css sets left:0, width:100%, height:60px, flex-direction:row.
+       We only need to ensure developers.css sidebar styles don't win. */
+    left: 0 !important;
+    top: 0 !important;
+    width: 100% !important;
+    height: 60px !important;
+    padding-top: 0 !important;
+    flex-direction: row !important;
+  }
+}

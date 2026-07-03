@@ -1,0 +1,38 @@
+<!--
+  ════════════════════════════════════════════════════════════════
+  PWA META TAGS — Paste ALL of this inside <head> on EVERY page:
+  index.html, news.html, gallery.html, AI.html, study.html, developers.html
+  ════════════════════════════════════════════════════════════════
+-->
+
+  <!-- PWA Manifest -->
+  <link rel="manifest" href="/manifest.json" />
+
+  <!-- Theme colour (browser UI bar colour) -->
+  <meta name="theme-color" content="#191970" />
+
+  <!-- iOS / Safari install support -->
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <meta name="apple-mobile-web-app-title" content="EFS" />
+  <link rel="apple-touch-icon" href="IMG-20260326-WA0001~2.jpg" />
+
+  <!-- General SEO / description -->
+  <meta name="description" content="Emeakaroha Foundation School — Excellence Is Possible. Official school website with news, gallery, AI assistant and more." />
+  <meta name="mobile-web-app-capable" content="yes" />
+
+<!--
+  ════════════════════════════════════════════════════════════════
+  SERVICE WORKER REGISTRATION — Paste this just before </body>
+  on EVERY page (or put it in a shared script file)
+  ════════════════════════════════════════════════════════════════
+-->
+<script>
+  if ('serviceWorker' in navigator) {
+    window.addEventListener('load', () => {
+      navigator.serviceWorker.register('/sw.js')
+        .then((reg) => console.log('EFS SW registered, scope:', reg.scope))
+        .catch((err) => console.error('EFS SW registration failed:', err));
+    });
+  }
+</script>
