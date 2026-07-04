@@ -136,9 +136,11 @@ export default async function handler(req, res) {
             if (cacheKey) setCache(cacheKey, reply);
             return res.status(200).json({ reply, source: provider.name });
         } catch (err) {
+            console.warn(`ai-chat: ${provider.name} failed — ${err.message}`);
             lastError = err;
         }
     }
 
+    console.error('ai-chat: all providers failed:', lastError?.message);
     return res.status(503).json({ error: 'The AI is currently overloaded. Please try again in a moment.' });
 }

@@ -62,7 +62,7 @@ const restoreChat = () => {
 
 // ── File attachment state ────────────────────────────────────────────────────
 const addFileBtn    = document.getElementById('study-attach-btn');
-const cancelFileBtn = document.getElementById('study-cancel-file-btn');
+const cancelFileBtn = document.getElementById('study-cancel-file');
 const fileInput     = document.getElementById('study-file-input');
 const fileWrapper   = document.getElementById('study-file-preview');
 const filePreview   = document.getElementById('study-file-preview');
