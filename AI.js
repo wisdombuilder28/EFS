@@ -12,6 +12,8 @@ const FUNCTION_URL = "/api/ai-chat"; // Vercel serverless function
 // ── Globals ───────────────────────────────────────────────────────────────────
 let controller;
 let typingInterval;
+let chatHistory     = [];
+let lastRequestTime = 0;
 const userData = { message: "", file: {} };
 
 // ── All DOM logic inside DOMContentLoaded ─────────────────────────────────────
