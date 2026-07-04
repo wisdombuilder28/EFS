@@ -1,20 +1,33 @@
-// ── Password is stored as a SHA-256 hash — never as plaintext ────────────────
-// To change the password: generate a new SHA-256 hash of your chosen password
-// at https://emn178.github.io/online-tools/sha256.html and paste it below.
-// Students who view source code only see this hash — it cannot be reversed.
-const HASHED_PASSWORD = "57de20f6a6a76f68b3d7702267e588fc0e10965cd64ef1625a163d248ed8109e";
+import { auth, signInWithEmailAndPassword } from './firebase.js';
 
-// Brute-force protection: track failed attempts
+// ── Staff login now runs on real Firebase Authentication, not a hash check ───
+// A hash comparison in the browser can be bypassed entirely from DevTools
+// (anyone can call addDoc/deleteDoc directly, skipping this file completely).
+// signInWithEmailAndPassword is verified by Firebase's servers, and Firestore
+// rules check that real session — so it can't be skipped client-side.
+//
+// ONE-TIME SETUP (in the Firebase console, console.firebase.google.com):
+//   1. Authentication → Sign-in method → enable "Email/Password".
+//   2. Authentication → Users → Add user → email: STAFF_EMAIL below,
+//      password: whatever your staff password should be.
+// STAFF_EMAIL doesn't need to be a real inbox — it's just the account's ID.
+// To change the password later, edit that user in the Firebase console.
+const STAFF_EMAIL = "staff@emeakarohaschool.edu.ng";
+
+// Brute-force protection: track failed attempts (Firebase also rate-limits
+// repeated failures on its own server, this just gives a friendlier message)
 let failedAttempts = 0;
 let lockoutUntil   = 0;
 
-const hashPassword = async (input) => {
-    const encoder = new TextEncoder();
-    const data    = encoder.encode(input);
-    const hash    = await crypto.subtle.digest('SHA-256', data);
-    return Array.from(new Uint8Array(hash))
-        .map(b => b.toString(16).padStart(2, '0'))
-        .join('');
+// Returns true only if Firebase confirms the password for STAFF_EMAIL is correct.
+const checkPassword = async (input) => {
+    try {
+        await signInWithEmailAndPassword(auth, STAFF_EMAIL, input);
+        return true;
+    } catch (err) {
+        if (err.code === 'auth/too-many-requests') throw err; // let caller show a distinct message
+        return false;
+    }
 };
 
 export function unlockAdmin() {
@@ -57,8 +70,8 @@ document.getElementById('submit-login').addEventListener('click', async () => {
     submitBtn.innerText = 'Checking...';
 
     try {
-        const hashed = await hashPassword(input);
-        if (hashed === HASHED_PASSWORD) {
+        const ok = await checkPassword(input);
+        if (ok) {
             failedAttempts = 0;
             lockoutUntil   = 0;
             document.getElementById('login-screen').classList.add('hidden');
@@ -74,17 +87,26 @@ document.getElementById('submit-login').addEventListener('click', async () => {
                 alert(`Wrong password! ${5 - failedAttempts} attempt(s) remaining.`);
             }
         }
+    } catch (err) {
+        if (err.code === 'auth/too-many-requests') {
+            alert('Too many attempts. Please wait a few minutes and try again.');
+        } else {
+            alert('Could not reach the login server. Check your connection and try again.');
+        }
     } finally {
         submitBtn.disabled  = false;
         submitBtn.innerText = 'Login';
     }
 });
 
-// Delete also needs the password — update its check here so it uses the same hash
+// Delete also needs the password — reuses the same Firebase Auth check
 export const verifyStaffPassword = async (input) => {
     if (!input) return false;
-    const hashed = await hashPassword(input);
-    return hashed === HASHED_PASSWORD;
+    try {
+        return await checkPassword(input);
+    } catch {
+        return false; // e.g. auth/too-many-requests — treat as "can't verify" for delete
+    }
 };
 
 document.getElementById('close-login').addEventListener('click', () => {

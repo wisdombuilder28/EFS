@@ -4,7 +4,7 @@
 // MUST live in the ROOT folder (same level as index.html)
 // ============================================================
 
-const CACHE_NAME   = 'efs-pwa-v2';
+const CACHE_NAME   = 'efs-pwa-v3';
 const OFFLINE_URL  = '/index.html';
 
 // All files to pre-cache so the app works offline
@@ -22,7 +22,7 @@ const PRECACHE_URLS = [
   '/gallery.js',
   '/theme.js',
   '/manifest.json',
-  '/IMG-20260326-WA0001~2.jpg',
+  '/images/icon-192.png',
 ];
 
 // ── INSTALL — pre-cache all core files ──────────────────────────────────────
@@ -93,8 +93,8 @@ self.addEventListener('push', (event) => {
     title:    'Emeakaroha Foundation School',
     body:     'A new announcement has been posted.',
     category: 'general',
-    icon:     '/IMG-20260326-WA0001~2.jpg',
-    badge:    '/IMG-20260326-WA0001~2.jpg',
+    icon:     '/images/icon-192.png',
+    badge:    '/images/icon-192.png',
     url:      '/news.html'
   };
 

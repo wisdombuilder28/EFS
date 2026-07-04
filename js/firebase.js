@@ -4,6 +4,9 @@ import {
   updateDoc, deleteDoc, doc, orderBy, query,
   onSnapshot, increment, arrayUnion
 } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js";
+import {
+  getAuth, signInWithEmailAndPassword, signOut
+} from "https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js";
 
 const firebaseConfig = {
   apiKey:            "AIzaSyDIsy4Hkqip2v3LraBk6CqH_TWONdjiwsc",
@@ -17,13 +20,15 @@ const firebaseConfig = {
 
 const app             = initializeApp(firebaseConfig);
 const db              = getFirestore(app);
+const auth            = getAuth(app);
 const postsCollection = collection(db, "announcements");
 
 // arrayUnion: adds a comment object into the post's comments array
 // without overwriting existing comments. No subcollection needed —
 // comments live inside the post document, so existing rules cover them.
 export {
-  db, postsCollection, collection,
+  db, auth, postsCollection, collection,
   addDoc, getDocs, updateDoc, deleteDoc, doc,
-  query, orderBy, onSnapshot, increment, arrayUnion
+  query, orderBy, onSnapshot, increment, arrayUnion,
+  signInWithEmailAndPassword, signOut
 };
