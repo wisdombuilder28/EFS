@@ -22,7 +22,7 @@ const PRECACHE_URLS = [
   '/gallery.js',
   '/theme.js',
   '/manifest.json',
-  '/images/icon-192.png',
+  '/icons/icon-192.png',
 ];
 
 // ── INSTALL — pre-cache all core files ──────────────────────────────────────
@@ -93,8 +93,8 @@ self.addEventListener('push', (event) => {
     title:    'Emeakaroha Foundation School',
     body:     'A new announcement has been posted.',
     category: 'general',
-    icon:     '/images/icon-192.png',
-    badge:    '/images/icon-192.png',
+    icon:     '/icons/icon-192.png',
+    badge:    '/icons/icon-192.png',
     url:      '/news.html'
   };
 
