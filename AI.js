@@ -152,11 +152,12 @@ document.addEventListener("DOMContentLoaded", () => {
 
         // Build the message for this turn — include image if attached
         let userContent;
-        if (userData.file?.data && userData.file?.mime_type?.startsWith('image/')) {
+        const hasImage = userData.file?.data && userData.file?.mime_type?.startsWith('image/');
+        if (hasImage) {
             // Send as multimodal content array so AI can actually see the image
             userContent = [
-                { type: 'text',       text: userData.message || 'What is in this image?' },
-                { type: 'image_url',  image_url: { url: `data:${userData.file.mime_type};base64,${userData.file.data}` } }
+                { type: 'text',      text: userData.message || 'What is in this image?' },
+                { type: 'image_url', image_url: { url: `data:${userData.file.mime_type};base64,${userData.file.data}` } }
             ];
             chatHistory.push({ role: 'user', content: userData.message || 'Image attached' });
         } else {
@@ -170,7 +171,12 @@ document.addEventListener("DOMContentLoaded", () => {
             const res = await fetch(FUNCTION_URL, {
                 method:  "POST",
                 headers: { "Content-Type": "application/json" },
-                body:    JSON.stringify({ messages: chatHistory }),
+                // Send chatHistory for context + currentMessage separately so the
+                // backend can see the image data (chatHistory only stores text)
+                body:    JSON.stringify({
+                    messages:       chatHistory.slice(0, -1), // history without current turn
+                    currentMessage: userContent,              // current turn WITH image if any
+                }),
                 signal:  controller.signal,
             });
 

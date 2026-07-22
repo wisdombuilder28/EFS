@@ -70,12 +70,39 @@ const tryGroq = async (messages) => {
     return data.choices[0].message.content.trim();
 };
 
-const tryGemini = async (messages) => {
+const tryGemini = async (messages, currentMessage) => {
     const key = process.env.GEMINI_API_KEY;
     if (!key) throw new Error('GEMINI_API_KEY not configured');
-    const contents = messages.map(m => ({ role: m.role === 'assistant' ? 'model' : 'user', parts: [{ text: m.content }] }));
+
+    // Build contents from history
+    const contents = messages.map(m => ({
+        role:  m.role === 'assistant' ? 'model' : 'user',
+        parts: [{ text: typeof m.content === 'string' ? m.content : m.content[0]?.text || '' }]
+    }));
     while (contents.length && contents[0].role !== 'user') contents.shift();
+
+    // Add current message — may include an image
+    if (Array.isArray(currentMessage)) {
+        // Multimodal: text + image
+        const parts = [];
+        for (const part of currentMessage) {
+            if (part.type === 'text') {
+                parts.push({ text: part.text });
+            } else if (part.type === 'image_url') {
+                // data:mime/type;base64,.... → extract mime + data
+                const dataUrl = part.image_url.url;
+                const [header, b64data] = dataUrl.split(',');
+                const mimeType = header.replace('data:', '').replace(';base64', '');
+                parts.push({ inlineData: { mimeType, data: b64data } });
+            }
+        }
+        contents.push({ role: 'user', parts });
+    } else {
+        contents.push({ role: 'user', parts: [{ text: currentMessage }] });
+    }
+
     if (!contents.length) throw new Error('Gemini: no user messages');
+
     const res  = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${key}`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -112,22 +139,29 @@ export default async function handler(req, res) {
     const studentIP = req.headers['x-forwarded-for']?.split(',')[0]?.trim() || 'unknown';
     if (isRateLimited(studentIP)) return res.status(429).json({ error: 'Too many questions. Please wait a minute.' });
 
-    const { messages } = req.body || {};
-    if (!messages || !Array.isArray(messages) || messages.length === 0) {
+    const { messages, currentMessage } = req.body || {};
+    if ((!messages || !Array.isArray(messages)) && !currentMessage) {
         return res.status(400).json({ error: 'No messages provided' });
     }
 
-    const lastUserMsg  = [...messages].reverse().find(m => m.role === 'user');
-    const cacheKey     = lastUserMsg?.content?.toLowerCase().trim() || '';
+    const history     = messages || [];
+    const current     = currentMessage || history[history.length - 1]?.content || '';
+    const isImageMsg  = Array.isArray(current); // multimodal array = has image
+
+    const lastUserMsg  = isImageMsg ? null : { content: typeof current === 'string' ? current : '' };
+    const cacheKey     = (!isImageMsg && lastUserMsg?.content?.toLowerCase().trim()) || '';
     const cachedAnswer = cacheKey ? getCached(cacheKey) : null;
 
     if (cachedAnswer) return res.status(200).json({ reply: cachedAnswer, source: 'cache' });
 
-    const providers = [
-        { name: 'Groq',       fn: () => tryGroq(messages)       },
-        { name: 'Gemini',     fn: () => tryGemini(messages)     },
-        { name: 'OpenRouter', fn: () => tryOpenRouter(messages) },
-    ];
+    // Images can only be processed by Gemini — skip Groq/OpenRouter for those
+    const providers = isImageMsg
+        ? [{ name: 'Gemini', fn: () => tryGemini(history, current) }]
+        : [
+            { name: 'Groq',       fn: () => tryGroq([...history, { role: 'user', content: current }])       },
+            { name: 'Gemini',     fn: () => tryGemini(history, current)                                      },
+            { name: 'OpenRouter', fn: () => tryOpenRouter([...history, { role: 'user', content: current }]) },
+          ];
 
     let lastError = null;
     for (const provider of providers) {
