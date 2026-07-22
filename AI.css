@@ -585,7 +585,7 @@ body.bot-responding .prompt-form #stop-response-btn {
 /* Responsive adjustments */
 @media (max-width: 768px) {
   .container {
-    padding: 20px 0 130px;
+    padding: 20px 0 200px; /* increased from 130px — guarantees last message clears the prompt bar */
   }
   .app-header :is(.heading, .sub-heading) {
     font-size: 2rem;

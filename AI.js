@@ -66,8 +66,8 @@ document.addEventListener("DOMContentLoaded", () => {
         p.textContent = text;
         return p;
     };
-    const scrollToBottom = () =>
-        container.scrollTo({ top: container.scrollHeight, behavior: "smooth" });
+    const scrollToBottom = (smooth = false) =>
+        container.scrollTo({ top: container.scrollHeight, behavior: smooth ? "smooth" : "instant" });
 
     // ── Typing animation ────────────────────────────────────────────────────
     const typingEffect = (text, textEl, botDiv) => {
@@ -76,11 +76,13 @@ document.addEventListener("DOMContentLoaded", () => {
         typingInterval = setInterval(() => {
             if (i < text.length) {
                 textEl.textContent += text[i++];
-                scrollToBottom();
+                scrollToBottom(); // instant during typing — no pileup of smooth animations
             } else {
                 clearInterval(typingInterval);
                 botDiv.classList.remove("loading");
                 document.body.classList.remove("bot-responding");
+                // Guaranteed final scroll after DOM settles — this is what was missing
+                requestAnimationFrame(() => scrollToBottom(true));
             }
         }, 14);
     };
