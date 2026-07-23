@@ -151,14 +151,14 @@ async function handleSubmit() {
     return;
   }
 
-  renderUserMessage(cleanInput);
+  // Capture attached file BEFORE rendering so preview shows in the bubble
+  const fileToSend = attachedFile;
+  if (attachedFile) cancelFileBtn.click(); // clears UI and resets attachedFile
+
+  renderUserMessage(cleanInput, fileToSend);
   inputEl.value = '';
   inputEl.style.height = 'auto';
   saveChatToStorage();
-
-  // Capture and clear attached file
-  const fileToSend = attachedFile;
-  if (attachedFile) cancelFileBtn.click();
 
   setProcessing(true);
   const loader = renderLoading();

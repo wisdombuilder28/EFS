@@ -259,7 +259,34 @@ body.dark-mode {
   color: var(--st-user-fg);
   border-radius: 18px 18px 4px 18px;
   box-shadow: 0 4px 15px var(--st-primary-glow);
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
 }
+
+/* Image preview inside the user bubble */
+.userBubble__img {
+  width: 100%;
+  max-width: 220px;
+  max-height: 180px;
+  object-fit: cover;
+  border-radius: 10px;
+  display: block;
+}
+
+/* File/PDF chip inside the user bubble */
+.userBubble__file {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: rgba(255,255,255,0.15);
+  border-radius: 8px;
+  padding: 6px 10px;
+  font-size: 0.82rem;
+}
+
+/* Remove default margin from p when inside a bubble with an image */
+.userBubble p { margin: 0; }
 
 .aiBubble {
   align-self: flex-start;

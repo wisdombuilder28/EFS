@@ -21,10 +21,34 @@ function scrollToBottom() {
 }
 
 /* ─── User message ──────────────────────────────────────────────────────── */
-export function renderUserMessage(text) {
+export function renderUserMessage(text, file = null) {
   const el = document.createElement('div');
   el.className = 'bubble userBubble';
-  el.textContent = text;
+
+  // Show image preview inside the bubble if a file was attached
+  if (file) {
+    if (file.mimeType.startsWith('image/')) {
+      const img = document.createElement('img');
+      img.src       = `data:${file.mimeType};base64,${file.base64}`;
+      img.alt       = file.name || 'Attached image';
+      img.className = 'userBubble__img';
+      el.appendChild(img);
+    } else {
+      // PDF or other document — show a small file chip
+      const chip = document.createElement('div');
+      chip.className   = 'userBubble__file';
+      chip.innerHTML   = `<span>📄</span><span>${file.name || 'Attachment'}</span>`;
+      el.appendChild(chip);
+    }
+  }
+
+  // Text (may be empty if user only sent an image)
+  if (text) {
+    const p = document.createElement('p');
+    p.textContent = text;
+    el.appendChild(p);
+  }
+
   chat().append(el);
   scrollToBottom();
   return el;
