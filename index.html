@@ -11,7 +11,7 @@
 <meta name="apple-mobile-web-app-capable" content="yes" />
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
 <meta name="apple-mobile-web-app-title" content="EFS" />
-<link rel="apple-touch-icon" href="icons/icon-192.png" />
+<link rel="apple-touch-icon" href="images/icon-192.png" />
     
     <link rel="stylesheet" href="style.css?v=1" type="text/css" media="all" />
     <link rel="stylesheet" href="image.css?v=1" type="text/css" media="all" />
@@ -30,16 +30,6 @@
 </script>
 
   <body>
-    <!-- ── PWA Install Banner ── -->
-    <div id="pwa-install-banner" style="display:none;position:fixed;bottom:0;left:0;right:0;z-index:9999;background:#191970;color:#fff;padding:14px 18px;display:none;align-items:center;gap:12px;box-shadow:0 -3px 16px rgba(0,0,0,0.35);font-family:'Poppins',sans-serif;">
-      <img src="icons/icon-192.png" alt="EFS" style="width:44px;height:44px;border-radius:10px;flex-shrink:0;">
-      <div style="flex:1;min-width:0;">
-        <div style="font-weight:700;font-size:14px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">Emeakaroha Foundation School</div>
-        <div style="font-size:12px;opacity:0.82;">Install the app for quick access</div>
-      </div>
-      <button id="pwa-install-btn" style="background:#ffd700;color:#191970;border:none;border-radius:8px;padding:9px 16px;font-weight:700;font-size:13px;cursor:pointer;flex-shrink:0;">Install</button>
-      <button id="pwa-dismiss-btn" style="background:transparent;border:none;color:#fff;font-size:20px;cursor:pointer;line-height:1;flex-shrink:0;opacity:0.7;">&times;</button>
-    </div>
     <input type="checkbox" id="check" hidden>
     <label for="check" class="ham" aria-label="Toggle menu">
         <span class="line line1"></span>
@@ -147,7 +137,7 @@
 
   <div class="carousel-container" id="school-carousel">
     <div class="carousel-track">
-      <img src="images/DSC_1492 (1).jpg" alt="School view">
+      <img src="images/hero-bg.jpg" alt="School view">
       <img src="images/4-1-scaled.jpg" alt="Students learning">
       <img src="images/file_000000008d2471f4b70a6d49d3056165.png" alt="Facilities">
       <img src="images/images (4).jpeg" alt="Campus event">
@@ -368,63 +358,46 @@
   <script src="image.js"></script>
   <script src="theme.js"></script>
   <script>
-    // ChatAI nav dropdown — tap/click to expand, click elsewhere to collapse
+    // ChatAI nav dropdown — robust mobile touch + desktop click handler
     document.addEventListener('DOMContentLoaded', function () {
       const item  = document.querySelector('.nav-has-sub');
       const label = item?.querySelector('.nav-sub-label');
       if (!item || !label) return;
 
-      label.addEventListener('click', (e) => {
+      // Flag prevents double-firing when touchend AND click both fire on mobile
+      let justToggledByTouch = false;
+
+      function toggleDropdown(e) {
         e.stopPropagation();
         item.classList.toggle('open');
+      }
+
+      // touchend fires reliably on ALL mobile browsers for <span> elements
+      label.addEventListener('touchend', function (e) {
+        e.preventDefault(); // stops browser synthesizing a second click event
+        justToggledByTouch = true;
+        toggleDropdown(e);
+        setTimeout(() => { justToggledByTouch = false; }, 400);
       });
 
-      document.addEventListener('click', () => item.classList.remove('open'));
-      item.addEventListener('click', (e) => e.stopPropagation());
+      // click handles desktop; on mobile only fires if touchend didn't
+      label.addEventListener('click', function (e) {
+        if (justToggledByTouch) return;
+        toggleDropdown(e);
+      });
+
+      // Collapse when tapping anywhere outside
+      document.addEventListener('click',     () => item.classList.remove('open'));
+      document.addEventListener('touchstart', function (e) {
+        if (!item.contains(e.target)) item.classList.remove('open');
+      });
+
+      // Stop clicks/touches inside the nav-has-sub from triggering collapse above
+      item.addEventListener('click',      (e) => e.stopPropagation());
+      item.addEventListener('touchstart', (e) => e.stopPropagation());
+
       window.addEventListener('resize', () => item.classList.remove('open'));
     });
-  <!-- ── PWA Install Prompt Logic ── -->
-  <script>
-    (function () {
-      const banner      = document.getElementById('pwa-install-banner');
-      const installBtn  = document.getElementById('pwa-install-btn');
-      const dismissBtn  = document.getElementById('pwa-dismiss-btn');
-      let deferredPrompt = null;
-
-      // Don't show again if user already dismissed or installed
-      if (localStorage.getItem('pwa-dismissed')) return;
-
-      window.addEventListener('beforeinstallprompt', function (e) {
-        e.preventDefault();
-        deferredPrompt = e;
-        // Show after a short delay so it doesn't ambush people
-        setTimeout(function () {
-          banner.style.display = 'flex';
-        }, 2500);
-      });
-
-      installBtn.addEventListener('click', function () {
-        if (!deferredPrompt) return;
-        banner.style.display = 'none';
-        deferredPrompt.prompt();
-        deferredPrompt.userChoice.then(function (choice) {
-          if (choice.outcome === 'accepted') {
-            localStorage.setItem('pwa-dismissed', '1');
-          }
-          deferredPrompt = null;
-        });
-      });
-
-      dismissBtn.addEventListener('click', function () {
-        banner.style.display = 'none';
-        localStorage.setItem('pwa-dismissed', '1');
-      });
-
-      // Hide banner if app is already installed (running in standalone mode)
-      if (window.matchMedia('(display-mode: standalone)').matches) {
-        localStorage.setItem('pwa-dismissed', '1');
-      }
-    })();
   </script>
 </body>
 </html>
