@@ -445,6 +445,31 @@ body.dark .value-item h4 {
   margin: 2rem auto 0;
 }
 
+/* ── Clickable program & facility cards ── */
+a.program-card, a.facility-card {
+  display: block;
+  text-decoration: none;
+  color: inherit;
+  cursor: pointer;
+}
+
+.card-learn-more {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 14px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: #32CD32;
+}
+
+.card-learn-more i { transition: transform .2s; }
+
+a.program-card:hover .card-learn-more i,
+a.facility-card:hover .card-learn-more i {
+  transform: translateX(4px);
+}
+
 .program-card {
   background: var(--bg-offwhite);
   border-radius: var(--radius-lg);
