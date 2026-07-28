@@ -80,6 +80,7 @@ fileInput.addEventListener('change', () => {
     const dataUrl   = e.target.result;
     const base64    = dataUrl.split(',')[1];
     attachedFile    = { base64, mimeType: file.type, name: file.name };
+    fileWrapper.classList.remove('hidden');       // ← this was missing; without it the wrapper stays display:none
     fileWrapper.classList.add('study-active');
     if (file.type.startsWith('image/')) {
       fileWrapper.classList.add('study-img');
@@ -100,6 +101,7 @@ fileInput.addEventListener('change', () => {
 
 cancelFileBtn.addEventListener('click', () => {
   attachedFile = null;
+  fileWrapper.classList.add('hidden');
   fileWrapper.classList.remove('study-active','study-img','study-doc');
   filePreview.style.display    = 'none';
   fileIconDisp.style.display   = 'none';
