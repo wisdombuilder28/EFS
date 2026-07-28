@@ -12,7 +12,7 @@ import { auth, signInWithEmailAndPassword } from './firebase.js';
 //      password: whatever your staff password should be.
 // STAFF_EMAIL doesn't need to be a real inbox — it's just the account's ID.
 // To change the password later, edit that user in the Firebase console.
-const STAFF_EMAIL = "staff@emeakarohaschool.edu.ng";
+const STAFF_EMAIL = "geniuswisdom123@gmail.com";
 
 // Brute-force protection: track failed attempts (Firebase also rate-limits
 // repeated failures on its own server, this just gives a friendlier message)
