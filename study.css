@@ -496,46 +496,84 @@ body.dark-mode {
 #study-attach-btn:active { transform: scale(.95); }
 
 /* File preview pill */
+/* ── File attachment preview card ──────────────────────────────────────── */
 .study-file-preview {
-  display: flex;
-  align-items: center;
-  gap: .6rem;
-  padding: .5rem .75rem;
+  display: none; /* shown via JS by removing .hidden */
+  align-items: flex-start;
+  gap: 0;
+  padding: 10px 12px;
   background: var(--st-surface);
-  border: 1px solid var(--st-border);
-  border-radius: 12px;
-  max-width: 100%;
-  font-size: .85rem;
-  color: var(--st-text);
+  border: 1.5px solid var(--st-border);
+  border-radius: 14px;
+  margin-bottom: 8px;
+  width: 100%;
+  box-sizing: border-box;
   box-shadow: var(--st-shadow-sm);
+  position: relative;
 }
-.study-file-preview.hidden { display: none; }
-.study-file-preview img {
-  width: 32px; height: 32px;
-  border-radius: 8px;
+
+/* When active (file attached), show as flex */
+.study-file-preview:not(.hidden) {
+  display: flex;
+}
+
+.study-file-preview.hidden { display: none !important; }
+
+/* Image thumbnail */
+.study-file-preview img#study-img-preview {
+  width: 80px;
+  height: 80px;
+  border-radius: 10px;
   object-fit: cover;
   flex-shrink: 0;
+  display: none; /* shown by JS when image is attached */
 }
-.study-file-preview span {
-  flex: 1;
+
+.study-file-preview.study-img img#study-img-preview {
+  display: block;
+}
+
+/* Doc/PDF chip */
+.study-file-preview span#study-file-name {
+  display: none;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.9rem;
+  color: var(--st-text);
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
+  max-width: calc(100% - 48px);
+  background: var(--st-surface2, rgba(255,255,255,0.06));
+  border-radius: 10px;
+  padding: 10px 14px;
 }
+
+.study-file-preview.study-doc span#study-file-name {
+  display: flex;
+}
+
+/* Dismiss button — top-right corner of card */
 #study-cancel-file {
-  width: 28px; height: 28px;
+  position: absolute;
+  top: 6px;
+  right: 6px;
+  width: 24px;
+  height: 24px;
   border-radius: 50%;
   border: none;
-  background: transparent;
-  color: var(--st-text-muted);
+  background: rgba(0,0,0,0.45);
+  color: #fff;
   cursor: pointer;
   display: inline-flex;
   align-items: center;
   justify-content: center;
+  font-size: 12px;
   flex-shrink: 0;
-  transition: background .2s, color .2s;
+  z-index: 2;
+  transition: background .2s;
 }
-#study-cancel-file:hover { background: var(--st-error-bg); color: var(--st-error-fg); }
+#study-cancel-file:hover { background: #d62939; }
 
 .User-Input {
   flex: 1 1 auto;
@@ -794,12 +832,6 @@ body.dark-mode {
 }
 .study-file-wrapper button:hover { background: var(--st-border); }
 #study-cancel-file-btn { color: #d62939; z-index: 2; }
-#study-file-preview {
-  width: 44px; height: 44px;
-  border-radius: 50%;
-  object-fit: cover;
-  position: absolute; top: 0; left: 0;
-}
 .study-file-icon-display {
   width: 44px; height: 44px;
   border-radius: 50%;

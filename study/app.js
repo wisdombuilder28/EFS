@@ -80,17 +80,16 @@ fileInput.addEventListener('change', () => {
     const dataUrl   = e.target.result;
     const base64    = dataUrl.split(',')[1];
     attachedFile    = { base64, mimeType: file.type, name: file.name };
-    fileWrapper.classList.remove('hidden');       // ← this was missing; without it the wrapper stays display:none
+    fileWrapper.classList.remove('hidden');
     fileWrapper.classList.add('study-active');
     if (file.type.startsWith('image/')) {
       fileWrapper.classList.add('study-img');
+      fileWrapper.classList.remove('study-doc');
       filePreview.src = dataUrl;
-      filePreview.style.display = 'block';
-      fileIconDisp.style.display = 'none';
     } else {
       fileWrapper.classList.add('study-doc');
-      fileIconDisp.style.display = 'flex';
-      filePreview.style.display = 'none';
+      fileWrapper.classList.remove('study-img');
+      fileIconDisp.textContent = '📄 ' + file.name;
     }
     addFileBtn?.classList.add('hidden');
     cancelFileBtn.style.display = 'flex';
@@ -103,8 +102,8 @@ cancelFileBtn.addEventListener('click', () => {
   attachedFile = null;
   fileWrapper.classList.add('hidden');
   fileWrapper.classList.remove('study-active','study-img','study-doc');
-  filePreview.style.display    = 'none';
-  fileIconDisp.style.display   = 'none';
+  filePreview.src       = '';
+  fileIconDisp.textContent = '';
   addFileBtn?.classList.remove('hidden');
   cancelFileBtn.style.display  = 'none';
 });
