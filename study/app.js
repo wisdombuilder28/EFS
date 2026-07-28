@@ -64,8 +64,8 @@ const restoreChat = () => {
 const addFileBtn    = document.getElementById('study-attach-btn');
 const cancelFileBtn = document.getElementById('study-cancel-file');
 const fileInput     = document.getElementById('study-file-input');
-const fileWrapper   = document.getElementById('study-file-preview');
-const filePreview   = document.getElementById('study-file-preview');
+const fileWrapper   = document.getElementById('study-file-preview');  // the container div
+const filePreview   = document.getElementById('study-img-preview');   // the actual <img> tag inside it
 const fileIconDisp  = document.getElementById('study-file-name');
 
 let attachedFile = null;   // { base64, mimeType, name }
